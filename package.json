@@ -1,0 +1,14 @@
+{
+  "name": "personal-book",
+  "version": "1.0.0",
+  "description": "day learn for day",
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "author": "liqian",
+  "devDependencies": {
+    "@vuepress/plugin-active-header-links": "^1.5.2",
+    "@vuepress/plugin-back-to-top": "^1.5.2"
+  }
+}
