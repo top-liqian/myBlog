@@ -33,6 +33,7 @@ module.exports = {
         title: 'javascript',
         collapable: true,
         children: [
+          { title: '面向对象编程', path: '/javaScript/oop/oop' },
           { title: '原型与原型链', path: '/javaScript/prototype/prototype' },
           { title: 'new操作符', path: '/javaScript/new/new' },
           { title: '继承', path: '/javaScript/inherit/inherit' },
