@@ -401,6 +401,23 @@ console.log('child1', childName1, childAge1)
 > 1. ES5的继承机制实际上先创建子类实例对象，然后在将父类的属性和方法绑定在子类上，通过apply/call的方式；（ES5先创建子类，在实例化父类并添加到子类this中）但是ES6的继承机制是先创建父类的实例对象this（即先调用super方法），然后再用子类的构造函数修改this（ES6先创建父类，在实例化子集中通过调用super方法访问父级后，在通过修改this实现继承）。
 > 2. ES5的继承时通过原型或构造函数机制来实现；.ES6通过class关键字定义类，类之间通过extends关键字实现继承，里面有构造方法constructor，子类必须在constructor方法中调用super方法，否则新建实例报错。因为子类没有自己的this对象，而是继承了父类的this对象，然后对其进行加工。如果不调用super方法，子类得不到this对象。
 
+## 如何继承Date对象
+
+使用经典的寄生组合式继承的写法遇到了报错信息
+
+`consol报错 TypeError: this is not a Date object.`
+
+关键是：由于调用的对象不是Date的实例，所以不允许调用，就算是自己通过原型继承的也不行
+
+### 为什么不能实现继承
+
+1. 从MDN上可以明确看到，`JavaScript的日期对象`只能通过`JavaScript Date`作为`构造函数`来`实例化`。
+2. v8引擎底层代码中有限制，如果调用对象的[[Class]]不是Date，则抛出错误
+
+so：要调用Date上方法的实例对象必须通过Date构造出来，否则不允许调用Date的方法
+
+[如何继承Date对象？](https://juejin.cn/post/6844903550636523533#heading-9)
+
 ## 面试题：
 
 1. ES5有几种继承的方式
@@ -409,3 +426,5 @@ console.log('child1', childName1, childAge1)
   答：不可以，在给 Child.prototype 添加新的属性或者⽅法后，Parent.prototype 也会随之改变
 4. ES6 的 class 继承用 ES5 如何实现？
 5. es5和es6继承的区别
+6. 如何继承Date对象
+
