@@ -2,11 +2,18 @@ module.exports = {
   title: '晴卿的学习之路',
   description: '高级前端开发工程师的养成之路',
   head: [
-    ['link', {
-      rel: 'icon',
-      href: `/favicon.ico`
-    }]
+    // add jquert and fancybox
+    ['script', { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js' }],
+    ['script', { src: 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.2/jquery.fancybox.min.js' }],
+    ['link', { rel: 'stylesheet', type: 'text/css', href: 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.2/jquery.fancybox.min.css' }]
   ],
+  // head: [
+
+  //   ['link', {
+  //     rel: 'icon',
+  //     href: `/favicon.ico`
+  //   }]
+  // ],
   dest: './docs/.vuepress/dist',
   ga: '',
   evergreen: true,
@@ -14,7 +21,7 @@ module.exports = {
     logo: '/home.png',
     nav: [
       { text: 'CSS', link: '/css/' },
-      { text: 'JavaScript', link: '/javaScript/' },
+      { text: 'Web', link: '/web/' },
       { text: 'node', link: '/node/' },
       { text: 'http', link: '/http/' },
       { text: '面试', link: '/interview/' },
@@ -29,16 +36,56 @@ module.exports = {
     ],
     sidebarDepth: 2,
     sidebar: {
-      '/javaScript/': [{
-        title: 'javascript',
-        collapable: true,
-        children: [
-          { title: '面向对象编程', path: '/javaScript/oop/oop' },
-          { title: '原型与原型链', path: '/javaScript/prototype/prototype' },
-          { title: 'new操作符', path: '/javaScript/new/new' },
-          { title: '继承', path: '/javaScript/inherit/inherit' },
-        ]
-      }]
+      '/web/': [
+        {
+          title: 'ES5',
+          collapable: true,
+          children: [
+            { title: '面向对象编程', path: '/web/javaScript/oop/oop' },
+            { title: '浏览器事件模型', path: '/web/javaScript/internet/internet' },
+            { title: '原型与原型链', path: '/web/javaScript/prototype/prototype' },
+            { title: 'new操作符', path: '/web/javaScript/new/new' },
+            { title: '继承', path: '/web/javaScript/inherit/inherit' },
+            { title: 'js执行上下文&作用域', path: '/web/javaScript/executionContext/executionContext' },
+            { title: '闭包', path: '/web/javaScript/closerFunction/closerFunction' },
+            { title: 'this', path: '/web/javaScript/this/this' },
+          ]
+        },
+        {
+          title: '面试题',
+          collapable: true,
+          children: [
+            {
+              title: '手写代码',
+              children: [
+                { title: 'indexOf', path: '/web/code/originCode/indexOf' },
+                { title: '数组扁平化', path: '/web/code/originCode/arrayFlat' },
+              ],
+            },
+            {
+              title: '编程题',
+              children: [
+                { title: '1. 实现一个方法，拆解URL参数中queryString', path: '/web/code/queryString' },
+                { title: '2. 一个字符串里出现最多的字符是什么，以及出现次数', path: '/web/code/mostCharInStr' },
+                { title: '3. 找出字符串中连续出现最多的字符和个数', path: '/web/code/mostChars' },
+              ],
+            },
+            {
+              title: '输出结果',
+              children: [
+                { title: '从一道面试题谈谈对 EventLoop 的理解', path: '/web/code/output/eventloop' },
+              ],
+            }
+          ],
+        },
+        {
+          title: 'ES6',
+          collapable: false,
+          children: [
+            { title: 'promise', path: '/web/es6/promise/promise' },
+          ],
+        }
+      ]
     }
   }
 }
