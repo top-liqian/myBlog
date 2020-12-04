@@ -20,11 +20,9 @@ module.exports = {
   themeConfig: {
     logo: '/home.png',
     nav: [
-      { text: 'CSS', link: '/css/' },
       { text: 'Web', link: '/web/' },
-      { text: 'node', link: '/node/' },
-      { text: 'http', link: '/http/' },
-      { text: '面试', link: '/interview/' },
+      { text: 'React', link: '/react/' },
+      { text: 'babel', link: '/babel/' },
       {
         text: 'Languages',
         items: [
@@ -60,6 +58,7 @@ module.exports = {
               children: [
                 { title: 'indexOf', path: '/web/code/originCode/indexOf' },
                 { title: '数组扁平化', path: '/web/code/originCode/arrayFlat' },
+                { title: '数组去重', path: '/web/code/originCode/arraySet' },
               ],
             },
             {
@@ -85,6 +84,26 @@ module.exports = {
             { title: 'promise', path: '/web/es6/promise/promise' },
           ],
         }
+      ],
+      '/react/': [
+        {
+          title: 'React',
+          collapable: true,
+          children: [
+            { title: '走进react', path: '/react/knowReact/knowReact' },
+            { title: '为什么React要用JSX？', path: '/react/jsx/jsx' },
+          ]
+        },
+      ],
+      '/babel/': [
+        {
+          title: 'React',
+          collapable: true,
+          children: [
+            { title: '了解babel', path: '/babel/knowBabel/knowBabel' },
+            { title: 'babel的运行原理', path: '/babel/basicBabel/basicBabel' },
+          ]
+        },
       ]
     }
   }
