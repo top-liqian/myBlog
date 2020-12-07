@@ -59,6 +59,7 @@ module.exports = {
                 { title: 'indexOf', path: '/web/code/originCode/indexOf' },
                 { title: '数组扁平化', path: '/web/code/originCode/arrayFlat' },
                 { title: '数组去重', path: '/web/code/originCode/arraySet' },
+                { title: '实现数组forEach的源码', path: '/web/code/originCode/array-forEach.md' },
               ],
             },
             {

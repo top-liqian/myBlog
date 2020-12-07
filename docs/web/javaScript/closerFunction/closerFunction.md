@@ -1,10 +1,16 @@
 # 闭包
 
-## 什么是闭包
+## 一、什么是闭包
 
-闭包就是指有权访问另一个函数作用域中变量的函数，闭包是一种特殊的对象，它有两部分构成，一部分是函数，另外一部分是创造该函数的环境。环境由闭包创建时作用域中任何局部变量所组成
+在 JavaScript 中，根据词法作用域的规则，内部函数总是可以访问其外部函数中声明的变量。
 
-## 怎样产生一个闭包
+当通过调用一个外部函数返回一个内部函数后，即使该外部函数已经执行结束了，但是内部函数引用外部函数的变量依然保存在内存中，闭包是一种特殊的对象，它有两部分构成，一部分是函数，另外一部分是创造该函数的环境。环境由闭包创建时作用域中任何局部变量所组成
+
+简单来说：
+
+在函数 A 中还有函数 B，函数 B 调用了函数 A 中的变量，那么函数 B 就称为函数 A 的闭包。
+
+## 二、怎样产生一个闭包
 
 创建闭包最常见的方式就是在一个函数内部定义另一个函数
 
@@ -118,7 +124,7 @@ var obj = {
 
 执行obj.getName()()实际上执行的是匿名函数，匿名函数的作用域指向了全局window，**匿名函数的执行函数具有全局性 **
 
-## 闭包的应用
+## 三、闭包的应用
 
 1. 定义函数的私有变量和函数
 
@@ -141,13 +147,122 @@ console.log(person.getName()) // xiaowa
    
 2. 可以做计数器
 
-## 闭包的缺点
+## 四、闭包的优缺点
 
-1. 定义了过多私有变量占用大量的内存，容易造成内存泄漏
+**优点**
 
-2. 闭包会对脚本的性能造成影响
+1. 缓存。将变量隐藏起来不被 GC 回收
+   
+2. 实现柯里化。利用闭包特性完成柯里化。
 
-## 闭包相关的面试题
+**缺点**
+
+1. 内存消耗。闭包产生的变量无法被销毁。
+
+2. 性能问题。由于闭包内部变量优先级高于外部变量，所以需要多查找作用域链的一个层次，一定程度影响查找速度。
+
+## 五、柯里化
+
+柯里化（Currying）是把接受多个参数的函数转变为单一参数的函数，并且返回接受余下的参数且返回结果的新函数的技术。
+
+**简单来说：**
+
++ 通过闭包管理
++ 支持链式调用
++ 每次运行返回一个 function
+
+即：通过将多个参数换成一个参数，每次运行返回新函数的技术
+
+### 1. 柯里化好处
+
++ 参数复用
+
++ 提前确认
+
++ 延迟运行
+
+### 2. 实现 add(1)(2)(3)
+
+```js
+// 实现一个 add 方法，使计算结果能够满足以下预期
+add(1)(2)(3) = 6;
+add(1, 2, 3)(4) = 10;
+add(1)(2)(3)(4)(5) = 15;
+```
+
+```js
+function add () {
+  const numberList = Array.from(arguments);
+  
+  // 进一步收集剩余参数
+  const calculate = function() {
+    numberList.push(...arguments);
+    return calculate;
+  }
+
+  // 利用 toString 隐式转换，最后执行时进行转换
+  calculate.toString = function() {
+    return numberList.reduce((a, b) => a + b, 0);
+  }
+
+  return calculate;
+}
+
+// 实现一个 add 方法，使计算结果能够满足以下预期
+console.log(add(1)(2)(3)); // 6
+console.log(add(1, 2, 3)(4)); // 10;
+console.log(add(1)(2)(3)(4)(5)); // 15;
+```
+
+### 3. 题目：实现compose(foo, bar, baz)('start')
+
+```js
+function foo(...args) {
+  console.log(args[0]);
+  return 'foo';
+}
+function bar(...args) {
+  console.log(args[0]);
+  return 'bar';
+}
+function baz(...args) {
+  console.log(args[0]);
+  return 'baz';
+}
+
+function compose() {
+  // 闭包元素 - 函数列表
+  const list = Array.from(arguments);
+
+  // 闭包元素 - 函数列表执行位置
+  let index = -1;
+
+  // 闭包元素 - 上一个函数的返回
+  let prev = '';
+
+  // 返回闭包函数
+  const doNext = function() {
+    index++; // 索引值累加
+    // 一开始没有上一个元素时，获取第二个括号的值
+    if (!prev) {
+      prev = arguments[0];
+    }
+    // 设置前一个结果为当前函数返回
+    prev = list[index](prev);
+    // 递归调用
+    if (index < list.length - 1) {
+      doNext(index + 1);
+    }
+  };
+
+  // 第一次返回闭包函数
+  return doNext;
+}
+
+compose(foo, bar, baz)('start');
+```
+
+## 六、闭包相关的面试题
 
 1. 输出下面的结果
 
@@ -170,4 +285,54 @@ var c = fun(0).fun(1) // undefiend 0
 c.fun(2) // 1
 c.fun(3) // 1
 
+```
+
+2. 输出结果
+
+```js
+function test() {
+  var n = 4399;
+
+  function add() {
+    n++;
+    console.log(n);
+  }
+
+  return {
+    n,
+    add
+  };
+};
+
+var result = test();
+var result2 = test();
+
+result.add(); // 输出啥
+result.add(); // 输出啥
+
+console.log(result.n); // 输出啥
+
+result2.add(); // 输出啥
+
+// 4400 4401 4399 4400
+```
+
+3. 输出结果
+  
+```js
+function Foo() {
+  var i = 0;
+  return function() {
+    console.log(i++);
+  }
+}
+
+var f1 = Foo();
+var f2 = Foo();
+
+f1();
+f1();
+f2();
+
+// 0 1 0
 ```
