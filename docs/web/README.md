@@ -16,12 +16,16 @@
 - [indexOf](./code/originCode/indexOf.md)
 - [数组扁平化](./code/originCode/arrayFlat.md)
 - [数组去重](./code/originCode/arraySet.md)
+
 ## 编程题
 
-- [1. 实现一个方法，拆解URL参数中queryString](./code/queryString.md)
-- [2. 一个字符串里出现最多的字符是什么，以及出现次数?](./code/mostCharInStr.md)
-- [3. 找出字符串中连续出现最多的字符和个数](./code/mostChars.md)
+- [1. 实现一个方法，拆解URL参数中queryString](./code/programe/queryString.md)
+- [2. 一个字符串里出现最多的字符是什么，以及出现次数?](./code/programe/mostCharInStr.md)
+- [3. 找出字符串中连续出现最多的字符和个数](./code/programe/mostChars.md)
+- [4. 实现一个add方法](./code/programe/myAdd.md)
+- [5. 阿里异步串行编程题：按照以下要求，实现 createFlow 函数](./code/programe/createFlow.md)
 
 ## 代码输出结果
 
 - [从一道面试题谈谈对 EventLoop 的理解](./code/output/eventloop.md)
+- [字节：输出以下代码运行结果](./code/output/square.md)

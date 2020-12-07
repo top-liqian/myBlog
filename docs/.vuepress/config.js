@@ -64,15 +64,18 @@ module.exports = {
             {
               title: '编程题',
               children: [
-                { title: '1. 实现一个方法，拆解URL参数中queryString', path: '/web/code/queryString' },
-                { title: '2. 一个字符串里出现最多的字符是什么，以及出现次数', path: '/web/code/mostCharInStr' },
-                { title: '3. 找出字符串中连续出现最多的字符和个数', path: '/web/code/mostChars' },
+                { title: '1. 实现一个方法，拆解URL参数中queryString', path: '/web/code/programe/queryString' },
+                { title: '2. 一个字符串里出现最多的字符是什么，以及出现次数', path: '/web/code/programe/mostCharInStr' },
+                { title: '3. 找出字符串中连续出现最多的字符和个数', path: '/web/code/programe/mostChars' },
+                { title: '4. 实现一个add方法', path: '/web/code/programe/myAdd' },
+                { title: '5. 阿里异步串行编程题：按照以下要求，实现 createFlow 函数', path: '/web/code/programe/createFlow' },
               ],
             },
             {
               title: '输出结果',
               children: [
-                { title: '从一道面试题谈谈对 EventLoop 的理解', path: '/web/code/output/eventloop' },
+                { title: '从一道面试题谈谈对EventLoop的理解', path: '/web/code/output/eventloop' },
+                { title: '字节：输出以下代码运行结果', path: '/web/code/output/square' },
               ],
             }
           ],
