@@ -21,6 +21,8 @@ module.exports = {
     logo: '/home.png',
     nav: [
       { text: 'Web', link: '/web/' },
+      { text: 'css', link: '/css/' },
+      { text: 'Vue3.0', link: '/todo/' },
       { text: 'React', link: '/react/' },
       { text: 'babel', link: '/babel/' },
       {
@@ -34,6 +36,27 @@ module.exports = {
     ],
     sidebarDepth: 2,
     sidebar: {
+      '/todo/': [
+        {
+          title: '1', path: '/todo/vue3/1/1'
+        }
+      ],
+      '/css/': [
+        {
+          title: 'css基础',
+          collapable: true,
+          children: [
+            { title: '深入理解BFC', path: '/css/bfc/bfc' }
+          ],
+        },
+        {
+          title: 'css面试',
+          collapable: true,
+          children: [
+            { title: '介绍下 BFC 及其应用', path: '/css/bfc/interview' }
+          ],
+        },
+      ],
       '/web/': [
         {
           title: 'ES5',
@@ -59,7 +82,8 @@ module.exports = {
                 { title: 'indexOf', path: '/web/code/originCode/indexOf' },
                 { title: '数组扁平化', path: '/web/code/originCode/arrayFlat' },
                 { title: '数组去重', path: '/web/code/originCode/arraySet' },
-                { title: '实现数组forEach的源码', path: '/web/code/originCode/array-forEach.md' },
+                { title: '实现数组forEach的源码', path: '/web/code/originCode/array-forEach' },
+                { title: '实现async/await', path: '/web/code/originCode/async-await' },
               ],
             },
             {
