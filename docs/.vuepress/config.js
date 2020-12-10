@@ -22,6 +22,7 @@ module.exports = {
     nav: [
       { text: 'Web', link: '/web/' },
       { text: 'css', link: '/css/' },
+      { text: 'vue', link: '/vue/' },
       { text: 'Vue3.0', link: '/todo/' },
       { text: 'React', link: '/react/' },
       { text: 'babel', link: '/babel/' },
@@ -41,22 +42,6 @@ module.exports = {
         {
           title: '1', path: '/todo/vue3/1/1'
         }
-      ],
-      '/css/': [
-        {
-          title: 'css基础',
-          collapable: true,
-          children: [
-            { title: '深入理解BFC', path: '/css/bfc/bfc' }
-          ],
-        },
-        {
-          title: 'css面试',
-          collapable: true,
-          children: [
-            { title: '介绍下 BFC 及其应用', path: '/css/bfc/interview' }
-          ],
-        },
       ],
       '/web/': [
         {
@@ -88,6 +73,15 @@ module.exports = {
           ],
         },
       ],
+      '/vue/': [
+        {
+          title: 'vue',
+          collapable: true,
+          children: [
+            { title: '导读 | 一文看懂 Vue.js 3.0 的优化', path: '/vue/vue3/reading-guide/reading-guide' },
+          ]
+        },
+      ],
       '/react/': [
         {
           title: 'React',
@@ -96,6 +90,22 @@ module.exports = {
             { title: '走进react', path: '/react/knowReact/knowReact' },
             { title: '为什么React要用JSX？', path: '/react/jsx/jsx' },
           ]
+        },
+      ],
+      '/css/': [
+        {
+          title: 'css基础',
+          collapable: true,
+          children: [
+            { title: '深入理解BFC', path: '/css/bfc/bfc' }
+          ],
+        },
+        {
+          title: 'css面试',
+          collapable: true,
+          children: [
+            { title: '介绍下 BFC 及其应用', path: '/css/bfc/interview' }
+          ],
         },
       ],
       '/babel/': [
@@ -113,7 +123,8 @@ module.exports = {
           title: 'JavaScript-常规题目',
           collapable: true,
           children: [
-            { title: '请用一句话描述 try catch 能捕获到哪些 JS 异常', path: '/interview/js/common/try-catch' },
+            { title: 'try/catch', path: '/interview/js/common/try-catch' },
+            { title: '数组map方法相关题目', path: '/interview/js/common/map/map' },
           ]
         },
         {
@@ -144,6 +155,13 @@ module.exports = {
           children: [
             { title: '从一道面试题谈谈对EventLoop的理解', path: '/interview/js/output/eventloop' },
             { title: '字节：输出以下代码运行结果', path: '/interview/js/output/square' },
+          ]
+        },
+        {
+          title: 'Vue3.0-常规题目',
+          collapable: true,
+          children: [
+            { title: 'Vue3.0常规面试题', path: '/interview/vue3/vue3' },
           ]
         },
       ],

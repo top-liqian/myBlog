@@ -3,6 +3,7 @@
 ## JavaScript常规题目
 
 - [请用一句话描述 try catch 能捕获到哪些 JS 异常](./js/common/try-catch.md)
+- [数组map方法相关题目](./js/common/map/map.md)
 
 ## 手写源码
 
@@ -24,3 +25,7 @@
 
 - [从一道面试题谈谈对 EventLoop 的理解](./js/output/eventloop.md)
 - [字节：输出以下代码运行结果](./js/output/square.md)
+
+## Vue3.0
+
+- [vue3.0常规面试题](./vue3/vue3.md)
