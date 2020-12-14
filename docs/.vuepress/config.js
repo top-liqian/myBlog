@@ -23,7 +23,7 @@ module.exports = {
       { text: 'Web', link: '/web/' },
       { text: 'css', link: '/css/' },
       { text: 'vue', link: '/vue/' },
-      { text: 'Vue3.0', link: '/todo/' },
+      { text: 'todo', link: '/todo/' },
       { text: 'React', link: '/react/' },
       { text: 'babel', link: '/babel/' },
       { text: '面试', link: '/interview/' },
@@ -40,7 +40,7 @@ module.exports = {
     sidebar: {
       '/todo/': [
         {
-          title: '1', path: '/todo/vue3/1/1'
+          title: '2', path: '/todo/vue3/2/2'
         }
       ],
       '/web/': [
@@ -78,7 +78,20 @@ module.exports = {
           title: 'vue',
           collapable: true,
           children: [
-            { title: '导读 | 一文看懂 Vue.js 3.0 的优化', path: '/vue/vue3/reading-guide/reading-guide' },
+            {
+              title: 'vue2',
+              collapable: true,
+              children: [
+                { title: '源码分析之computed', path: '/vue/vue2/computed/computed' },
+              ]
+            },
+            {
+              title: 'vue3',
+              collapable: true,
+              children: [
+                { title: '导读 | 一文看懂 Vue.js 3.0 的优化', path: '/vue/vue3/reading-guide/reading-guide' },
+              ]
+            }
           ]
         },
       ],
@@ -155,6 +168,13 @@ module.exports = {
           children: [
             { title: '从一道面试题谈谈对EventLoop的理解', path: '/interview/js/output/eventloop' },
             { title: '字节：输出以下代码运行结果', path: '/interview/js/output/square' },
+          ]
+        },
+        {
+          title: 'Vue2.0-常规题目',
+          collapable: true,
+          children: [
+            { title: 'computed相关的面试题', path: '/interview/vue2/computed/computed' },
           ]
         },
         {

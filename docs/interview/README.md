@@ -26,6 +26,10 @@
 - [从一道面试题谈谈对 EventLoop 的理解](./js/output/eventloop.md)
 - [字节：输出以下代码运行结果](./js/output/square.md)
 
+## Vue2.0
+
+- [computed相关的面试题](./vue2/computed/computed.md)
+
 ## Vue3.0
 
 - [vue3.0常规面试题](./vue3/vue3.md)
