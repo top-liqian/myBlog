@@ -8,11 +8,11 @@
 ## 手写源码
 
 - [indexOf](./js/originCode/indexOf.md)
-- [数组扁平化](./js/originCode/arrayFlat.md)
-- [数组去重](./js/originCode/arraySet.md)
-- [实现数组forEach的源码](./js/originCode/array-forEach.md)
+- [数组扁平化](./js/originCode/array/flat.md)
+- [数组去重](./js/originCode/array/set.md)
+- [实现数组forEach的源码](./js/originCode/array/forEach.md)
 - [实现async/await](./js/originCode/async-await.md)
-- [实现字符串trim方法](./js/originCode/string-trim/trim.md)
+- [实现字符串trim方法](./js/originCode/string/trim.md)
 
 ## 编程题
 
@@ -26,6 +26,7 @@
 
 - [从一道面试题谈谈对 EventLoop 的理解](./js/output/eventloop.md)
 - [字节：输出以下代码运行结果](./js/output/square.md)
+- [常见基础输出问题](./js/output/base.md)
 
 ## Vue2.0
 

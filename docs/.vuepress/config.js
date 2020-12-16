@@ -155,11 +155,11 @@ module.exports = {
           collapable: true,
           children: [
             { title: 'indexOf', path: '/interview/js/originCode/indexOf' },
-            { title: '数组扁平化', path: '/interview/js/originCode/arrayFlat' },
-            { title: '数组去重', path: '/interview/js/originCode/arraySet' },
-            { title: '实现数组forEach的源码', path: '/interview/js/originCode/array-forEach' },
+            { title: '数组扁平化', path: '/interview/js/originCode/array/flat' },
+            { title: '数组去重', path: '/interview/js/originCode/array/set' },
+            { title: '实现数组forEach的源码', path: '/interview/js/originCode/array/forEach' },
             { title: '实现async/await', path: '/interview/js/originCode/async-await' },
-            { title: '实现字符串trim方法', path: '/interview/js/originCode/string-trim/trim' },
+            { title: '实现字符串trim方法', path: '/interview/js/originCode/string/trim' },
           ]
         },
         {
@@ -179,6 +179,7 @@ module.exports = {
           children: [
             { title: '从一道面试题谈谈对EventLoop的理解', path: '/interview/js/output/eventloop' },
             { title: '字节：输出以下代码运行结果', path: '/interview/js/output/square' },
+            { title: '常见基础输出问题', path: '/interview/js/output/base' },
           ]
         },
         {
