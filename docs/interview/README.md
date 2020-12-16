@@ -11,8 +11,11 @@
 - [数组扁平化](./js/originCode/array/flat.md)
 - [数组去重](./js/originCode/array/set.md)
 - [实现数组forEach的源码](./js/originCode/array/forEach.md)
+- [实现数组reduce的源码](./js/originCode/array/reduce.md)
 - [实现async/await](./js/originCode/async-await.md)
 - [实现字符串trim方法](./js/originCode/string/trim.md)
+- [实现ajax](./js/originCode/http/ajax/ajax.md)
+- [手动实现jsonp](./js/originCode/http/jsonp/jsonp.md)
 
 ## 编程题
 

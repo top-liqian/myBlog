@@ -54,7 +54,10 @@ module.exports = {
             { title: '变量', path: '/web/javaScript/variable/variable' },
             { title: '类型转换', path: '/web/javaScript/type-change/type-change' },
             { title: '原型与原型链', path: '/web/javaScript/prototype/prototype' },
-            { title: 'new操作符', path: '/web/javaScript/new/new' },
+            { title: 'new操作符', path: '/web/javaScript/operator/new/new' },
+            { title: 'typeof操作符', path: '/web/javaScript/operator/typeof' },
+            { title: 'instanceof操作符', path: '/web/javaScript/operator/instanceof' },
+            { title: 'indexOf操作符', path: '/web/javaScript/operator/indexOf' },
             { title: '继承', path: '/web/javaScript/inherit/inherit' },
             { title: 'js执行上下文&作用域', path: '/web/javaScript/executionContext/executionContext' },
             { title: '闭包', path: '/web/javaScript/closerFunction/closerFunction' },
@@ -158,8 +161,11 @@ module.exports = {
             { title: '数组扁平化', path: '/interview/js/originCode/array/flat' },
             { title: '数组去重', path: '/interview/js/originCode/array/set' },
             { title: '实现数组forEach的源码', path: '/interview/js/originCode/array/forEach' },
+            { title: '实现数组reduce的源码', path: '/interview/js/originCode/array/reduce' },
             { title: '实现async/await', path: '/interview/js/originCode/async-await' },
             { title: '实现字符串trim方法', path: '/interview/js/originCode/string/trim' },
+            { title: '实现ajax', path: '/interview/js/originCode/http/ajax/ajax' },
+            { title: '手动实现jsonp', path: '/interview/js/originCode/http/jsonp/jsonp' },
           ]
         },
         {
