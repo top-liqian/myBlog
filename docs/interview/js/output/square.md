@@ -66,3 +66,35 @@ function test() {
 }
 test()
 ```
+
+# 为什么 for 循环嵌套顺序会影响性能？
+
+```js
+var t1 = new Date().getTime()
+for (let i = 0; i < 100; i++) {
+  for (let j = 0; j < 1000; j++) {
+    for (let k = 0; k < 10000; k++) {
+    }
+  }
+}
+var t2 = new Date().getTime()
+console.log('first time', t2 - t1)
+
+for (let i = 0; i < 10000; i++) {
+  for (let j = 0; j < 1000; j++) {
+    for (let k = 0; k < 100; k++) {
+
+    }
+  }
+}
+var t3 = new Date().getTime()
+console.log('two time', t3 - t2)
+```
+
+两个循环的次数的是一样的，但是 j 与 k 的初始化次数是不一样的
+
+第一个三重循环当中，j的初始化次数是100次，k的初始化次数是 100 * 1000 = 10w次
+
+第二个三重循环当中，j的初始化次数是10000次，k的初始化次数是 1000 * 10000 = 1000w次
+
+所以外层for循环的次数越小速度会越快一些

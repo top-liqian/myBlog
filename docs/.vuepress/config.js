@@ -25,6 +25,7 @@ module.exports = {
       { text: 'vue', link: '/vue/' },
       { text: 'todo', link: '/todo/' },
       { text: 'React', link: '/react/' },
+      { text: 'webpack', link: '/webpack/' },
       { text: 'babel', link: '/babel/' },
       { text: '面试', link: '/interview/' },
       {
@@ -121,6 +122,15 @@ module.exports = {
           ],
         },
       ],
+      '/webpack/': [
+        {
+          title: '7天搞定Webpack原理与实践',
+          collapable: true,
+          children: [
+            { title: '如何使用 Webpack 实现模块化打包？', path: '/webpack/webpack-learn/1-webpack' }
+          ],
+        },
+      ],
       '/babel/': [
         {
           title: 'React',
@@ -149,6 +159,7 @@ module.exports = {
             { title: '数组去重', path: '/interview/js/originCode/arraySet' },
             { title: '实现数组forEach的源码', path: '/interview/js/originCode/array-forEach' },
             { title: '实现async/await', path: '/interview/js/originCode/async-await' },
+            { title: '实现字符串trim方法', path: '/interview/js/originCode/string-trim/trim' },
           ]
         },
         {
