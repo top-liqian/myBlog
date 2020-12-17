@@ -107,3 +107,17 @@ void MainTherad(){
 从上面代码可以看出来，我们添加了一个 ProcessDelayTask 函数，该函数是专门用来处理延迟执行任务的。这里我们要重点关注它的执行时机，在上段代码中，处理完消息队列中的一个任务之后，就开始执行 ProcessDelayTask 函数。ProcessDelayTask 函数会根据发起时间和延迟时间计算出到期的任务，然后依次执行这些到期的任务。等到期的任务执行完成之后，再继续下一个循环过程。通过这样的方式，一个完整的定时器就实现了。
 
 设置一个定时器，JavaScript 引擎会返回一个定时器的 ID。那通常情况下，当一个定时器的任务还没有被执行的时候，也是可以取消的，具体方法是调用 clearTimeout 函数，并传入需要取消的定时器的 ID 。如下面代码所示：clearTimeout(timer_id) 其实浏览器内部实现取消定时器的操作也是非常简单的，就是直接从 delayed_incoming_queue 延迟队列中，通过 ID 查找到对应的任务，然后再将其从队列中删除掉就可以了。
+
+## setTimeout实现setInterval
+
+```js
+function myInterval(fn,interval,...args) {
+  let context=this
+  setTimeout(()=>{
+     fn.apply(context,args)
+     myInterval(fn,interval,...args)//别忘了为它传入参数
+  }, interval)
+}
+
+myInterval((num)=>console.log(num),500,10)
+```

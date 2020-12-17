@@ -14,6 +14,7 @@
 - [实现数组reduce的源码](./js/originCode/array/reduce.md)
 - [实现async/await](./js/originCode/async-await.md)
 - [实现字符串trim方法](./js/originCode/string/trim.md)
+- [实现call,apply,bind](./js/originCode/call-apply-bind.md)
 - [实现ajax](./js/originCode/http/ajax/ajax.md)
 - [手动实现jsonp](./js/originCode/http/jsonp/jsonp.md)
 

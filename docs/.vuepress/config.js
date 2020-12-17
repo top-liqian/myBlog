@@ -164,6 +164,7 @@ module.exports = {
             { title: '实现数组reduce的源码', path: '/interview/js/originCode/array/reduce' },
             { title: '实现async/await', path: '/interview/js/originCode/async-await' },
             { title: '实现字符串trim方法', path: '/interview/js/originCode/string/trim' },
+            { title: '实现call,apply,bind', path: '/interview/js/originCode/call-apply-bind' },
             { title: '实现ajax', path: '/interview/js/originCode/http/ajax/ajax' },
             { title: '手动实现jsonp', path: '/interview/js/originCode/http/jsonp/jsonp' },
           ]
