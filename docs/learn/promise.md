@@ -6,12 +6,14 @@
 
 ## 2. promise的基础
 
-1. promise 会有三种状态，【进行中-pending】【已完成-fulfullied】【已拒绝-rejected】，进行中的状态可以转换成已完成和已拒绝状态，此过程不可逆，已经更改过的状态没有办法继续更改
-2. es6中的构造函数peomise，我们实例化之后需要传入一个函数，它接受两个函数参数resolve和reject，执行第一个函数【resolve】之后就会把当前的promise更改成【已完成】状态，执行第二个函数【reject】之后就会把当前的promise更改成【已拒绝】状态，
-3. promise提供了.then方法，接受两个函数作为参数，当promise实例状态从pending转换成【fulfilled】状态时执行第一个函数参数，同时resolve若有返回值，将传递给此函数；当promise实例状态从pending转换成【rejected】状态时执行第二个函数参数，同时reject若有返回值，将传递给此函数
+1. promise 会有三种状态，`【进行中-pending】【已完成-fulfullied】【已拒绝-rejected】`，进行中的状态可以转换成已完成和已拒绝状态，此过程不可逆，已经更改过的状态没有办法继续更改
+2. es6中的构造函数promise，我们实例化之后需要传入一个函数，它接受两个函数参数resolve和reject，执行第一个函数【resolve】之后就会把当前的promise更改成`【已完成】`状态，执行第二个函数【reject】之后就会把当前的promise更改成`【已拒绝】`状态，
+3. promise提供了`.then`方法，接受两个函数作为参数，当promise实例状态从`【pending】`转换成`【fulfilled】`状态时执行第一个函数参数，同时resolve若有返回值，将传递给此函数；当promise实例状态从【pending】转换成【rejected】状态时执行第二个函数参数，同时reject若有返回值，将传递给此函数
 4. 【已拒绝】的promise，后续可以通过.then的第二个函数参数捕获；也可以通过.catch捕获；也可以通过try catch捕获
 
 ## 3. 如何封装异步操作为promise
+
+封装一个ajax请求：
 
 ```js
   function ajaxAsync(url) {

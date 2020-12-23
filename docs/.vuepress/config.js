@@ -94,6 +94,8 @@ module.exports = {
               collapable: true,
               children: [
                 { title: '导读 | 一文看懂 Vue.js 3.0 的优化', path: '/vue/vue3/reading-guide/reading-guide' },
+                { title: '组件渲染-vnode到真实DOM', path: '/vue/vue3/componentization/componentization' },
+                { title: '组件更新-完整的DOM的diff流程', path: '/vue/vue3/componentization/componentUpdate' },
               ]
             }
           ]
