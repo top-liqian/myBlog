@@ -153,6 +153,7 @@ module.exports = {
           children: [
             { title: 'try/catch', path: '/interview/js/common/try-catch' },
             { title: '数组map方法相关题目', path: '/interview/js/common/map/map' },
+            { title: '继承相关的面试题', path: '/interview/js/common/inherit/inherit' },
           ]
         },
         {
@@ -175,11 +176,12 @@ module.exports = {
           title: 'JavaScript-编程题',
           collapable: true,
           children: [
-            { title: '1. 实现一个方法，拆解URL参数中queryString', path: '/interview/js/programe/queryString' },
+            { title: '1. 拆解URL参数中queryString', path: '/interview/js/programe/queryString' },
             { title: '2. 一个字符串里出现最多的字符是什么，以及出现次数', path: '/interview/js/programe/mostCharInStr' },
             { title: '3. 找出字符串中连续出现最多的字符和个数', path: '/interview/js/programe/mostChars' },
             { title: '4. 实现一个add方法', path: '/interview/js/programe/myAdd' },
-            { title: '5. 阿里异步串行编程题：按照以下要求，实现 createFlow 函数', path: '/interview/js/programe/createFlow' },
+            { title: '5. 实现 createFlow 函数', path: '/interview/js/programe/createFlow' },
+            { title: '6. 实现一个normalize函数', path: '/interview/js/programe/normalize/normalize' },
           ],
         },
         {

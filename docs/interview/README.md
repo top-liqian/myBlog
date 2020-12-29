@@ -4,6 +4,7 @@
 
 - [请用一句话描述 try catch 能捕获到哪些 JS 异常](./js/common/try-catch.md)
 - [数组map方法相关题目](./js/common/map/map.md)
+- [继承相关的面试题](./js/common/inherit/inherit.md)
 
 ## 手写源码
 
@@ -25,6 +26,7 @@
 - [3. 找出字符串中连续出现最多的字符和个数](./js/programe/mostChars.md)
 - [4. 实现一个add方法](./js/programe/myAdd.md)
 - [5. 阿里异步串行编程题：按照以下要求，实现 createFlow 函数](./js/programe/createFlow.md)
+- [6. 实现一个normalize函数](./js/programe/normalize/normalize.md)
 
 ## 代码输出结果
 
