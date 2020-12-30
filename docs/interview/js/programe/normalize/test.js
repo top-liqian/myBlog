@@ -2,7 +2,7 @@
 
 // 示例一: 'abc' --> { value: 'abc' }
 
-// 示例二：'[abc[bcd[def]]]' --> {value: 'abc', children: {value: 'bcd', children: {value: 'def'}}}
+// 示例二：'[abc[bcd[def]]]' --> { value: 'abc', children: {value: 'bcd', children: {value: 'def'}} }
 
 
 const str1 = 'abc'
@@ -12,7 +12,7 @@ const str2 = '[abc[bcd[def]]]'
 function normalize(str) {
     let obj = {}
     let flag = null
-    const setValue = function (obj = {}, value) {
+    const setValue = function (obj = {}, value = '') {
         obj.value = value
         return obj
     }
@@ -26,7 +26,7 @@ function normalize(str) {
     return obj
 }
 
-const result1 = normalize(str1)
+// const result1 = normalize(str1)
 const result2 = normalize(str2)
 
-console.log('result', result1, result2)
+console.log('result', result2)

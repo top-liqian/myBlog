@@ -8,7 +8,7 @@
 
 示例二：'[abc[bcd[def]]]' --> {value: 'abc', children: {value: 'bcd', children: {value: 'def'}}}
 
-解法1:
+解法1: 正则匹配使用reduce方法
 
 ```js
 const str1 = 'abc'
@@ -38,7 +38,28 @@ const result2 = normalize(str2)
 console.log('result', result1, result2)
 ```
 
-解法2：
+解法2： string通过split转换成数组进行reduce
 
 ```js
+const str1 = 'abc'
+const str2 = '[abc[bcd[def]]]'
+
+
+const normalize = (str) => {
+    let result = {}
+    str.split(/\[|\]/g).filter(Boolean).reduce((obj, value, index, arr) => {
+        obj.value = value
+        if (index !== arr.length - 1) {
+            console.log('obj', obj)
+            return obj.children = {}
+        }
+    }, result)
+
+    return result
+}
+
+const result1 = normalize(str1)
+const result2 = normalize(str2)
+
+console.log('result', result1, result2)
 ```
