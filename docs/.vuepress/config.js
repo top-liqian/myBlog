@@ -132,7 +132,11 @@ module.exports = {
           title: '7天搞定Webpack原理与实践',
           collapable: true,
           children: [
-            { title: '如何使用 Webpack 实现模块化打包？', path: '/webpack/webpack-learn/1-webpack' }
+            { title: 'webpack基础原理&面试', path: '/webpack/webpack-learn/1-webpack' },
+            { title: 'webpack-dev-server', path: '/webpack/webpack-learn/2-webpack' },
+            { title: 'webpack热更新', path: '/webpack/webpack-learn/3-webpack' },
+            { title: 'webpack打包高级配置', path: '/webpack/webpack-learn/4-webpack' },
+            { title: '打包工具技术选型', path: '/webpack/webpack-learn/5-webpack' },
           ],
         },
       ],

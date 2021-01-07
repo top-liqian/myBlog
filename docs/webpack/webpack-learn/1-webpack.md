@@ -90,6 +90,112 @@ Plugin是用来解决项目中除了资源模块打包以外的其他自动化�
   }
 ```
 
+4. webpack注入全局变量的插件 - `webpack.DefinePlugin`
+
+```js
+const webpack = require('webpack')
+module.exports = {
+  plugins: [
+    new webpack.DefinePlugin({
+      API_BASE_URL: '"https://api.example.com"'
+    })
+  ]
+}
+```
+
+5. webpack配置代码的合并 - `webapck-merge`
+
+```js
+const merge = require('webpack-merge')
+const common = require('./webpack.common')
+module.exports = merge(common, {
+  // 开发模式配置
+})
+```
+
+6. 将 CSS 代码从打包结果中提取出来 - `mini-css-extract-plugin`
+
+由于要捕获到所有的样式，我们需要将style-loader替换成MiniCssExtractPlugin.loader
+
+区别于style-loader，style-loader是将css代码以style的形式插入到代码当中，而`mini-css-extract-plugin`的loader是将css代码抽离出来直接通过 link 标签引入页面
+
+> 如果你的 CSS 体积不是很大的话，提取到单个文件中，效果可能适得其反，因为单独的文件就需要单独请求一次。个人经验是如果 CSS 超过 200KB 才需要考虑是否提取出来，作为单独的文件。
+
+```js
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css|less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader',
+        ]
+      }
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin()
+  ]
+}
+```
+
+7. 压缩单独提取出来的css代码 - `optimize-css-assets-webpack-plugin`
+
+Webpack 内置的压缩插件仅仅是针对 JS 文件的压缩，其他资源文件的压缩都需要额外的插件。
+
+此插件基于`mini-css-extract-plugin`进行使用
+
+```js
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css|less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader',
+        ]
+      }
+    ]
+  },
+  // OptimizeCssAssetsWebpackPlugin两种配置方式
+  plugins: [
+    new MiniCssExtractPlugin(),
+    // new OptimizeCssAssetsWebpackPlugin() 配置在此处则是这个插件在任何情况下都会工作
+  ],
+  optimization: {
+    minimizer: [ // webpack 压缩插件统一交与minizmier统一进行控制
+      new OptimizeCssAssetsWebpackPlugin()
+      // 只会在 minimize 特性开启时才工作
+    ]
+  }
+}
+```
+
+**注意： 配置在minimizer内部的OptimizeCssAssetsWebpackPlugin虽然可以正常压缩css代码，但是webpack内置对于js代码的压缩处理却失效了，原因在于，webpack会认为你配置了minimizer是要采用自定义的压缩方式，所以内置的压缩方式就会失效**
+
+8. 压缩js代码 - `terser-webpack-plugin`
+```js
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+const TerserWepackPlugin = require('terser-webpack-plugin')
+
+module.exports = {
+  optimization: {
+    minimizer: [
+      new OptimizeCssAssetsWebpackPlugin(),
+      new TerserWepackPlugin()
+    ]
+  }
+}
+```
+
+
 ### 3、手动实现一个plugin的步骤
 
 1. Webpack 要求我们的插件必须是一个函数或者是一个包含 apply 方法的对象，一般我们都会定义一个类型，在这个类型中定义 apply 方法，然后在使用时，再通过这个类型来创建一个实例对象去使用这个插件;
