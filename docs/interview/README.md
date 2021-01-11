@@ -36,6 +36,7 @@
 
 ## Vue2.0
 
+- [vue基础相关面试题](./vue2/base.md)
 - [computed相关的面试题](./vue2/computed/computed.md)
 
 ## Vue3.0

@@ -201,6 +201,7 @@ module.exports = {
           title: 'Vue2.0-常规题目',
           collapable: true,
           children: [
+            { title: 'vue基础相关面试题', path: '/interview/vue2/base' },
             { title: 'computed相关的面试题', path: '/interview/vue2/computed/computed' },
           ]
         },
