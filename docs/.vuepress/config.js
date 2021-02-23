@@ -7,13 +7,6 @@ module.exports = {
     ['script', { src: 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.2/jquery.fancybox.min.js' }],
     ['link', { rel: 'stylesheet', type: 'text/css', href: 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.2/jquery.fancybox.min.css' }]
   ],
-  // head: [
-
-  //   ['link', {
-  //     rel: 'icon',
-  //     href: `/favicon.ico`
-  //   }]
-  // ],
   dest: './docs/.vuepress/dist',
   ga: '',
   evergreen: true,
@@ -28,6 +21,7 @@ module.exports = {
       { text: 'webpack', link: '/webpack/' },
       { text: 'babel', link: '/babel/' },
       { text: '面试', link: '/interview/' },
+      { text: '工程化管理', link: '/project/' },
       {
         text: 'Languages',
         items: [
@@ -220,6 +214,15 @@ module.exports = {
           ]
         },
       ],
+      '/project/': [
+        {
+          title: 'npm/yarn',
+          collapable: true,
+          children: [
+            { title: 'install', path: '/project/npm/install' },
+          ]
+        },
+      ]
     }
   }
 }
