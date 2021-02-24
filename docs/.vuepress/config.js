@@ -74,18 +74,25 @@ module.exports = {
       '/vue/': [
         {
           title: 'vue',
-          collapable: true,
+          collapable: false,
           children: [
             {
               title: 'vue2',
-              collapable: true,
+              collapable: false,
               children: [
                 { title: '源码分析之computed', path: '/vue/vue2/computed/computed' },
               ]
             },
             {
+              title: '手写mini-vue-code',
+              collapable: false,
+              children: [
+                { title: '合并策略-生命周期', path: '/vue/vue2/code/merge-lifecycle' },
+              ]
+            },
+            {
               title: 'vue3',
-              collapable: true,
+              collapable: false,
               children: [
                 { title: '导读 | 一文看懂 Vue.js 3.0 的优化', path: '/vue/vue3/reading-guide/reading-guide' },
                 { title: '组件渲染-vnode到真实DOM', path: '/vue/vue3/componentization/componentization' },

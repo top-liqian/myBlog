@@ -4,6 +4,10 @@
 
 - [源码分析之computed](./vue2/computed/computed.md)
 
+## 手写mini-vue-code
+
+- [合并策略-生命周期](./vue2/code/merge-lifecycle.md)
+
 ## Vue3
 
 - [导读 | 一文看懂 Vue.js 3.0 的优化](./vue3/reading-guide/reading-guide.md)
