@@ -89,6 +89,7 @@ module.exports = {
               children: [
                 { title: '合并策略-生命周期', path: '/vue/vue2/code/merge-lifecycle' },
                 { title: '属性依赖更新', path: '/vue/vue2/code/dep-watcher' },
+                { title: 'nextTick', path: '/vue/vue2/code/nextTick' },
               ]
             },
             {
