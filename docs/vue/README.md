@@ -9,6 +9,7 @@
 - [合并策略-生命周期](./vue2/code/merge-lifecycle.md)
 - [属性依赖更新](./vue2/code/dep-watcher.md)
 - [nextTick](./vue2/code/nextTick.md)
+- [watch实现原理](./vue2/code/watch.md)
 
 ## Vue3
 
