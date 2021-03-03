@@ -37,5 +37,7 @@ computed 计算完毕，释放Dep.target，并且Dep.target 恢复上一个watch
 
 ## 5. computed与watch的区别
 
-computed本质上就是一个watcher，与watch最大的区别就在于computed会将计算属性进行缓存，第一次不计算，只有被调用时才会计算
+计算属性computed和监听器watcher都可以观察属性的变化从而做出响应，computed本质上就是一个watcher，与watch最大的区别就在于computed更多的是作为缓存功能的观察者，特可以讲一个或者多个data的属性进行复杂的计算生成一个新的值，提供给渲染函数使用，当依赖发生变化时，computed不会立即重新计算生成新的值，而是先标记为脏数据，当下次computed被获取的时候，才会重新计算并返回；而监听器watch并不具备缓存性，监听器watch提供一个监听函数，当监听的属性发生变化的时候，会立即执行该函数；
+
+
 
