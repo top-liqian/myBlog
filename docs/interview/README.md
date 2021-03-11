@@ -2,6 +2,7 @@
 
 ## JavaScript常规题目
 
+- [js基础面试题](./js/base.md)
 - [请用一句话描述 try catch 能捕获到哪些 JS 异常](./js/common/try-catch.md)
 - [数组map方法相关题目](./js/common/map/map.md)
 - [继承相关的面试题](./js/common/inherit/inherit.md)

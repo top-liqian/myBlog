@@ -159,6 +159,7 @@ module.exports = {
           title: 'JavaScript-常规题目',
           collapable: true,
           children: [
+            { title: 'js基础面试题', path: '/interview/js/base' },
             { title: 'try/catch', path: '/interview/js/common/try-catch' },
             { title: '数组map方法相关题目', path: '/interview/js/common/map/map' },
             { title: '继承相关的面试题', path: '/interview/js/common/inherit/inherit' },
