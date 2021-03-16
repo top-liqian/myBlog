@@ -515,3 +515,341 @@ a === b;
 ```
 
 答案是C。每个字面的正则表达式都是一个单独的实例，即使它们的内容相同。
+
+## 30. 数组也爱比大小
+
+```js
+var a = [1, 2, 3];
+var b = [1, 2, 3];
+var c = [1, 2, 4];
+
+a == b;
+a === b;
+a > c;
+a < c;
+
+// A. false, false, false, true
+// B. false, false, false, false
+// C. true, true, false, true
+// D. other
+```
+
+答案是A。数组也是对象，ES5规范指出如果两个对象进行相等比较，只有在它们指向同一个对象的情况下才会返回 true，其他情况都返回 false。而对象进行大小比较，会调用 toString 方法转成字符串进行比较，所以结果就变成了字符串 "1,2,3" 和 "1,2,4" 按照字典序进行比较了（你若不信，可以重现两个变量的 toString 方法，进行测试）。
+
+## 31. 原型把戏
+
+```js
+var a = {};
+var b = Object.prototype;
+
+[a.prototype === b, Object.getPrototypeOf(a) == b]
+
+// A. [false, true]
+// B. [true, true]
+// C. [false, false]
+// D. other
+```
+
+答案是A。对象是没有 prototype 属性的，所以 a.prototype 是 undefined，但我们可以通过 Object.getPrototypeOf 方法来获取一个对象的原型。
+
+## 32. 构造函数的函数
+
+```js
+function f() {}
+var a = f.prototype;
+var b = Object.getPrototypeOf(f);
+a === b;
+
+// A. true
+// B. false
+// C. null
+// D. other
+```
+
+答案是B, f.prototype = { constructor: f, __proto__: Object.prototype }, 由于f是一个构造函数，Object.getPrototypeOf 会获取构造当前对象的原型，它的原型始终指向Function.prototype == Object.getPrototypeOf(f), 所以两者不相等
+
+## 33. 构造函数的函数
+
+```js
+function Person() {}
+var p = new Person();
+
+var a = p.__proto__;
+var b = Object.getPrototypeOf(p);
+var c = Person.prototype;
+console.log(a === b, a === c, b === c);
+// true, true, true
+
+var d = Person.__proto__;
+var e = Object.getPrototypeOf(Person);
+var f = Function.prototype;
+console.log(d === e, d === f, e === f);
+// true, true, true
+```
+
+##  34. 禁止修改函数名
+
+```js
+function foo() {}
+var oldName = foo.name;
+foo.name = "bar";
+[oldName, foo.name];
+
+// A. error
+// B. ["", ""]
+// C. ["foo", "foo"]
+// D. ["foo", "bar"]
+```
+答案是C。函数名是禁止修改的，规范写的很清楚，所以这里的修改无效。
+
+## 35. 替换陷阱
+
+```js
+"1 2 3".replace(/\d/g, parseInt);
+
+// A. "1 2 3"
+// B. "0 1 2"
+// C. "NaN 2 3"
+// D. "1 NaN 3"
+```
+答案是D。如果 replace 方法第二个参数是一个函数，则会在匹配的时候多次调用，第一个参数是匹配的字符串，第二个参数是匹配字符串的下标。所以变成了调用 parseInt(1, 0)、parseInt(2, 2)和parseInt(3, 4)，结果你就懂了
+
+## 36. Function的名字
+
+```js
+function f() {}
+var parent = Object.getPrototypeOf(f);
+console.log(f.name);
+console.log(parent.name);
+console.log(typeof eval(f.name));
+console.log(typeof eval(parent.name));
+
+// A. "f", "Empty", "function", "function"
+// B. "f", undefined, "function", error
+// C. "f", "Empty", "function", error
+// D. other
+```
+
+答案是C。根据第30题的解释，我们知道代码中的 parent 实际上就是 Function.prototype，而它在控制台中输出为：
+
+```js
+function () {
+  [native code]
+}
+```
+它的 name 属性是 ""，所以你 eval("")是得不到任何东西的。
+
+## 37. 正则测试陷阱
+
+```js
+var lowerCaseOnly = /^[a-z]+$/;
+[lowerCaseOnly.test(null), lowerCaseOnly.test()]
+
+// A. [true, false]
+// B. error
+// C. [true, true]
+// D. [false, true]
+```
+
+答案是C。test 方法的参数如果不是字符串，会经过抽象 ToString操作强制转成字符串，因此实际上测试的是字符串 "null" 和 "undefined"。
+
+## 38. 逗号定义数组
+
+```js
+[,,,].join(", ")
+
+// A. ", , , "
+// B. "undefined, undefined, undefined, undefined"
+// C. ", , "
+// D. ""
+```
+
+答案是C。JavaScript允许用逗号来定义数组，得到的数组是含有3个 undefined 值的数组。MDN关于 join 方法的描述：
+
+> 所有的数组元素被转换成字符串，再用一个分隔符将这些字符串连接起来。如果元素是undefined 或者null， 则会转化成空字符串。
+
+## 39. 保留字 class
+
+```js
+
+var a = {class: "Animal", name: "Fido"};
+console.log(a.class);
+
+// A. "Animal"
+// B. Object
+// C. an error
+// D. other
+```
+
+答案是D。实际上真正的答案取决于浏览器。class 是保留字，但是在Chrome、Firefox和Opera中可以作为属性名称，在IE中是禁止的。另一方面，其实所有浏览器基本接受大部分的关键字（如：int、private、throws等）作为变量名，而class是禁止的。
+
+## 40. 无效日期
+
+```js
+var a = new Date("epoch");
+
+// A. Thu Jan 01 1970 01:00:00 GMT+0100(CET)
+// B. current time
+// C. error
+// D. other
+```
+
+答案是D。实际结果是 Invalid Date，它实际上是一个Date对象，因为 a instance Date 的结果是 true，但是它是无效的Date。Date对象内部是用一个数字来存储时间的，在这个例子中，这个数字是 NaN。
+
+## 41. 神鬼莫测的函数长度
+
+```js
+var a = Function.length;
+var b = new Function().length;
+console.log(a === b);
+
+// A. true
+// B. false
+// C. error
+// D. other
+```
+
+答案是B。实际上a的值是1，b的值是0。还是继续来看MDN文档关于 Function.length 的描述吧！Function构造器的属性：
+
+> Function 构造器本身也是个Function。他的 length 属性值为 1 。该属性 Writable: false, Enumerable: false, Configurable: true。
+
+Function原型对象的属性：
+
+> Function原型对象的 length 属性值为 0 。
+
+所以，在本例中，a代表的是 Function 构造器的 length 属性，而b代表的是 Function 原型的 length 属性。
+
+## 42. Date的面具
+
+```js
+var a = Date(0);
+var b = new Date(0);
+var c = new Date();
+[a === b, b === c, a === c];
+
+// A. [true, true, true]
+// B. [false, false, false]
+// C. [false, true, false]
+// D. [true, false, false]
+```
+
+答案是B。先看MDN关于Date对象的注意点：
+
+> 需要注意的是只能通过调用 Date 构造函数来实例化日期对象：以常规函数调用它（即不加 new 操作符）将会返回一个字符串，而不是一个日期对象。另外，不像其他JavaScript 类型，Date 对象没有字面量格式。
+
+a = "Tue Mar 16 2021 19:24:13 GMT+0800 (中国标准时间)"
+
+b c 是一个Date对象，并且b代表的是1970年那个初始化时间，而c代表的是当前时间
+
+## 43. min与max共舞
+
+```js
+var min = Math.min();
+var max = Math.max();
+console.log(min < max);
+
+// A. true
+// B. false
+// C. error
+// D. other
+```
+
+答案是B。看MDN文档，对 Math.min的描述：
+
+> 如果没有参数，结果为Infinity。
+
+对 Math.max 的描述：
+
+> 如果没有参数，结果为-Infinity。
+
+## 44. 警惕全局匹配
+
+```js
+function captureOne(re, str) {
+  var match = re.exec(str);
+  return match && match[1];
+}
+
+var numRe = /num=(\d+)/ig,
+  wordRe = /word=(\w+)/i,
+  a1 = captureOne(numRe, "num=1"),
+  a2 = captureOne(wordRe, "word=1"),
+  a3 = captureOne(numRe, "NUM=1"),
+  a4 = captureOne(wordRe, "WORD=1");
+
+[a1 === a2, a3 === a4]
+
+// A. [true, true]
+// B. [false, false]
+// C. [true, false]
+// D. [false, true]
+```
+
+答案是C。看MDN关于 exec 方法的描述：
+
+> 当正则表达式使用 "g" 标志时，可以多次执行 exec 方法来查找同一个字符串中的成功匹配。当你这样做时，查找将从正则表达式的  lastIndex 属性指定的位置开始。
+
+所以a3的值为 null。
+
+## 45. 最熟悉的陌生人
+
+```js
+var a = new Date("2014-03-19");
+var b = new Date(2014, 03, 19);
+[a.getDay() == b.getDay(), a.getMonth() == b.getMonth()]
+
+// A. [true, true]
+// B. [true, false]
+// C. [false, true]
+// D. [false, false]
+```
+答案是D。先看MDN关于Date的一个注意事项：
+
+> 当Date作为构造函数调用并传入多个参数时，如果数值大于合理范围时（如月份为13或者分钟数为70），相邻的数值会被调整。比如 new Date(2013, 13, 1)等于new Date(2014, 1, 1)，它们都表示日期2014-02-01（注意月份是从0开始的）。其他数值也是类似，new Date(2013, 2, 1, 0, 70)等于new Date(2013, 2, 1, 1, 10)，都表示时间2013-03-01T01:10:00。
+
+此外，getDay 返回指定日期对象的星期中的第几天（0～6）
+
+## 46. 匹配隐式转换
+
+```js
+if("http://giftwrapped.com/picture.jpg".match(".gif")) {
+  console.log("a gif file");
+} else {
+  console.log("not a gif file");
+}
+
+// A. "a gif file"
+// B. "not a gif file"
+// C. error
+// D. other
+```
+
+答案是A。看MDN对 match 方法的描述：
+
+> 如果传入一个非正则表达式对象，则会隐式地使用 new RegExp(obj)
+将其转换为正则表达式对象。
+
+所以我们的字符串 ".gif" 会被转换成正则对象 /.gif/，会匹配到 "/gif"
+
+## 47. 重复声明变量
+
+```js
+function foo(a) {
+  var a;
+  return a;
+}
+
+function bar(a) {
+  var a = "bye";
+  return a;
+}
+
+[foo("hello"), bar("hello")]
+
+// A. ["hello", "hello"]
+// B. ["hello", "bye"]
+// C. ["bye", "bye"]
+// D. other
+```
+
+答案是B。一个变量在同一作用域中已经声明过，会自动移除 var 声明，但是赋值操作依旧保留，结合前面提到的变量提升机制，你就明白了
