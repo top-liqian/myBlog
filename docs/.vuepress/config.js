@@ -20,6 +20,7 @@ module.exports = {
       { text: 'React', link: '/react/' },
       { text: 'webpack', link: '/webpack/' },
       { text: 'babel', link: '/babel/' },
+      { text: '前端性能', link: '/performance-optimization/' },
       { text: '面试', link: '/interview/' },
       { text: '工程化管理', link: '/project/' },
       {
@@ -153,6 +154,15 @@ module.exports = {
             { title: 'babel的运行原理', path: '/babel/basicBabel/basicBabel' },
           ]
         },
+      ],
+      '/performance-optimization/': [
+        {
+          title: '前端性能指标',
+          collapable: true,
+          children: [
+            { title: '体系总览：性能优化体系及关键指标设定', path: '/performance-optimization/1-base' },
+          ]
+        }
       ],
       '/interview/': [
         {
