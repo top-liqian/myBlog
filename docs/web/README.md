@@ -15,6 +15,7 @@
 - [this](./javaScript/this/this.md)
 - [箭头函数](./javaScript/arrow-function/arrow-function.md)
 - [数组原生方法](./javaScript/array-prototype-code/array-prototype-code.md)
+- [JSON.stringfy](./javaScript/json-stringify/json-stringify.md)
 
 # JavaScript-ES6
 

@@ -13,6 +13,7 @@ module.exports = {
   themeConfig: {
     logo: '/home.png',
     nav: [
+      { text: 'JavaScript', link: '/javaScript/' },
       { text: 'Web', link: '/web/' },
       { text: 'css', link: '/css/' },
       { text: 'vue', link: '/vue/' },
@@ -39,6 +40,17 @@ module.exports = {
           title: '2', path: '/todo/vue3/2/2'
         }
       ],
+      '/javaScript/': [
+        {
+          title: '异步编程',
+          collapable: true,
+          children: [
+            { title: '异步编程概览', path: '/javaScript/async-programe/base' },
+            { title: '同步编程与异步编程概念', path: '/javaScript/async-programe/sync-mode/sync-mode' },
+            { title: 'Promise', path: '/javaScript/async-programe/promise/base' },
+          ],
+        }
+      ],
       '/web/': [
         {
           title: 'JavaScript-ES5',
@@ -59,6 +71,7 @@ module.exports = {
             { title: 'this', path: '/web/javaScript/this/this' },
             { title: '箭头函数', path: '/web/javaScript/arrow-function/arrow-function' },
             { title: '数组原生方法', path: '/web/javaScript/array-prototype-code/array-prototype-code' },
+            { title: 'JSON.stringfy', path: '/web/javaScript/json-stringify/json-stringify' },
           ]
         },
         {
