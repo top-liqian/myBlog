@@ -2,6 +2,8 @@
 
 ## 一、什么是闭包
 
+闭包（Closure）：函数和其周围状态（此法环境）的饮用捆绑在一起而形成闭包。可以在另一个作用域中调用一个函数的内部函数并可以访问到该函数的作用域中的成员
+
 在 JavaScript 中，根据词法作用域的规则，内部函数总是可以访问其外部函数中声明的变量。
 
 当通过调用一个外部函数返回一个内部函数后，即使该外部函数已经执行结束了，但是内部函数引用外部函数的变量依然保存在内存中，闭包是一种特殊的对象，它有两部分构成，一部分是函数，另外一部分是创造该函数的环境。环境由闭包创建时作用域中任何局部变量所组成
@@ -9,6 +11,8 @@
 简单来说：
 
 在函数 A 中还有函数 B，函数 B 调用了函数 A 中的变量，那么函数 B 就称为函数 A 的闭包。
+
+**闭包的本质：**函数在执行的时候会放到一个执行栈上当函数执行完毕之后就从执行栈上移除，但是堆上作用域成员因为被外部引用而不能被释放，因此内部函数依然可以访问外部函数的成员
 
 ## 二、怎样产生一个闭包
 
@@ -165,6 +169,9 @@ console.log(person.getName()) // xiaowa
 
 柯里化（Currying）是把接受多个参数的函数转变为单一参数的函数，并且返回接受余下的参数且返回结果的新函数的技术。
 
++ 当一个函数有多个参数的时候可以先传递一部分参数调用它（这部分参数永远不变）
++ 然后返回一个新的函数接受剩余的参数，返回结果
+
 **简单来说：**
 
 + 通过闭包管理
@@ -261,6 +268,58 @@ function compose() {
 
 compose(foo, bar, baz)('start');
 ```
+
+### lodash中的柯里化函数
+
+**_.curry(func)**
+
++ 功能：创建一个函数，该函数接收一个或者多个func的参数，如果func所需要的参数都被提供则执行func并返回执行的结果。否则继续返回该函数并等待接收剩余的参数
++ 参数：需要柯里化的参数
++ 返回值：柯里化之后的函数
+
+### 柯里化案例
+
+1. 提取字符串中的空白字符
+
+```js
+''.match(/\s+/g)
+
+const match = reg => (str => str.match(reg))
+const matchSpace = match(/\s+/g)
+console.log(matchSpace('helloword')) // null
+console.log(matchSpace('hello word')) // ['']
+```
+
+2. 提取数组中的空白字符
+
+```js
+const match = reg => (str => str.match(reg))
+const haveSpace = match(/\s+/g)
+const _filter = func => (arr => arr.filter(func))
+console.log(_filter(haveSpace)(['helloword', 'hello word']))
+```
+
+### 模拟实现_.curry(func)方法
+
+```js
+function curry(func) {
+  return function curriedFn(...args) {
+    if (args.length < func.length) {
+      return function () {
+        return curriedFn(...args.concat(Array.from(arguments)))
+      }
+    }
+    return func(...args)
+  }
+}
+```
+
+### 总结
+
++ 柯里化可以让我们给一个函数传递较少的参数得到一个已经记住了某些固定参数的新函数
++ 这是一种对函数参数的缓存
++ 让函数变得更灵活，让函数的粒度更小
++ 可以把多元函数转换成一元函数，可以组合使用函数产生强大的功能
 
 ## 六、闭包相关的面试题
 

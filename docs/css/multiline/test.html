@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS 实现多行文本“展开收起”</title>
+</head>
+<body>
+    <style>
+        .container {
+           display: flex;
+        }
+        .text {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .text::before{
+            content: '';
+            float: right;
+            width: 0; /*设置为0，或者不设置宽度*/
+            height: 100%;
+            margin-bottom: -24px;
+        }
+        .btn {
+            height: 24px;
+            float: right;
+            /* margin-top: 20px; */
+            clear: both;
+        }
+    </style>
+
+    <div class="container">
+            <div class="text">
+                <button class="btn">展开</button>
+                浮动元素是如何定位的
+                正如我们前面提到的那样，当一个元素浮动之后，它会被移出正常的文档流，然后向左或者向右平移，一直平移直到碰到了所处的容器的边框，或者碰到另外一个浮动的元素。
+            </div>
+        
+
+    </div>
+</body>
+</html>

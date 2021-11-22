@@ -81,3 +81,9 @@ const ass = add(1)(2)(3)
 console.log(ass); // 6
 console.log(add(1, 2, 3)(4)); // 10;
 console.log(add(1)(2)(3)(4)(5)); // 15;
+
+console.log(111)
+const match = reg => (str => str.match(reg))
+const haveSpace = match(/\s+/g)
+const _filter = func => (arr => arr.filter(func))
+console.log(_filter(haveSpace)(['helloword', 'hello word']))

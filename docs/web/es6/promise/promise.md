@@ -1,492 +1,295 @@
-### promise
+## 1. 为什么需要promise
 
-#### promise出现的原因 --- 解决异步嵌套的问题
+直接使用传统的回调函数的方式去完成复杂的异步流程，就会出现函数嵌套的问题，非常不利于后面的维护，为了使回调函数可以使用更优雅的方式进行调用，CommonJs社区提出了Promise的规范，目的在于用一种更合理更强大的解决方案，在ES2015中被标准化，成为语言规范，可以让异步操作变得近乎【同步化】，尽可能的避免回调地狱
 
-回调地狱带来的负面作用有以下几点：
+所谓Promise，就是一个对象，用来解决异步任务的结束过后成功还是失败，就像是内部对外部的一种承诺待定状态（pending），最后有可能成功（fulfilled），也有可能失败（rejected），无论是成功还是失败，都存在一定的反应即任务自动执行，一旦明确了结果就不能在改变了
 
-   + 代码臃肿。
-   + 可读性差。
-   + 耦合度过高，可维护性差。
-   + 代码复用性差。
-   + 容易滋生 bug。
-   + 只能在回调里处理异常。
+## 2. promise的基础
 
-有了promise可以很好的避免回调地狱产生的影响
+1. promise 会有三种状态，`【进行中-pending】【已完成-fulfullied】【已拒绝-rejected】`，进行中的状态可以转换成已完成和已拒绝状态，此过程不可逆，已经更改过的状态没有办法继续更改
+2. es6中的构造函数promise，我们实例化之后需要传入一个函数，它接受两个函数参数resolve和reject，执行第一个函数【resolve】之后就会把当前的promise更改成`【已完成】`状态，执行第二个函数【reject】之后就会把当前的promise更改成`【已拒绝】`状态，
+3. promise提供了`.then`方法，接受两个函数作为参数，当promise实例状态从`【pending】`转换成`【fulfilled】`状态时执行第一个函数参数，同时resolve若有返回值，将传递给此函数；当promise实例状态从【pending】转换成【rejected】状态时执行第二个函数参数，同时reject若有返回值，将传递给此函数
+4. 【已拒绝】的promise，后续可以通过.then的第二个函数参数捕获；也可以通过.catch捕获；也可以通过try catch捕获
 
-#### 什么是promise
+## 3. 如何封装异步操作为promise
 
-```js
-new Promise(请求1)
-  .then(请求2(请求结果1))
-  .then(请求3(请求结果2))
-  .then(请求4(请求结果3))
-  .then(请求5(请求结果4))
-  .catch(处理异常(异常信息))
-```
-Promise 的写法更为直观，并且能够在外层捕获异步函数的异常信息。
+封装一个ajax请求：
 
 ```js
-   // 采用观察者模式  then-搜集依赖 -> 异步触法resolve ->   取出依赖执行
-    class MyPromise {
-        constructor(excutor) {
-            this._resolveQueue = []
-            this._rejecctQueue = []
-
-            const _resolve = (val) => {
-                while (this._resolveQueue.length) {
-                  const callback = this._resolveQueue.shift()
-                  callback(val)
-                }
-            }
-            const _reject = (val) => {
-                while (this._rejecctQueue.length) {
-                  const callback = this._rejecctQueue.shift()
-                  callback(val)
-                }
-            }
-            excutor(_resolve, _reject)
+  function ajaxAsync(url) {
+    return new Promise((resolve, reject) => {
+      var client = new XMLHttpRequest()
+      client.open("GET", url)
+      client.onChange = function () {
+        if (this.readyState !== 4) return
+        if (this.status === 200) {
+          resolve(this.response)
+        } else {
+          reject(new Error(this.statusText))
         }
-        then (resolveFn, rejectFn) {
-            this._resolveQueue.push(resolveFn)
-            this._rejecctQueue.push(rejectFn)
-        }
-    }
-    const p1 = new MyPromise((resolve, reject) => {
-        setTimeout(() => {
-            resolve('result')
-        }, 1000);
+      }
+      client.send()
     })
-    p1.then(res => console.log(res))
-
-    // test code
-
-```
-
-> 1. Promise本质是一个状态机，且状态只能为以下三种：Pending（等待态）、Fulfilled（执行态）、Rejected（拒绝态），状态的变更是单向的，只能从Pending -> Fulfilled 或 Pending -> Rejected，状态变更不可逆
-> 2. then方法接收两个可选参数，分别对应状态改变时触发的回调。then方法返回一个promise。then 方法可以被同一个 promise 调用多次。
-
-补充代码
-```js
-    const PENGING = 'pending'
-    const FULFILLED = 'fulfilled'
-    const Reject = 'rejected'
-    class MyPromise {
-        construtor (executor) {
-            this._status = PENGING
-            this._resolveQueue = []
-            this._rejectQueue = []
-            let _resolve = (val) => {
-                if (this._status !== PENGING) return
-                this._status = FULFILLED
-                while (this._resolveQueue.length) {
-                    const callback = this._resolveQueue.shift()
-                    callback(val)
-                }
-            }
-            let _reject = (val) => {
-                if (this._status !== PENGING) return
-                this._status = Reject
-                while (this._rejectQueue.length) {
-                    const callback = this._rejectQueue.shift()
-                    callback(val)
-                }
-            }
-            executor(_resolve, _reject)
-        }
-        
-        then (resolveFn, rejectFn) {
-            this._resolveQueue.push(resolveFn)
-            this._rejectQueu.push(rejectFn)
-        }
-    }
-```
-
-实现then的链式调用的方式
-
-1. then方法需要返回一个```Promise```, 这样才能找到then方法
-2. 回调需要按顺序执行，我们要等当前的Promise状态变更之后在执行下一个then收集回调，这就要求我们对then的返回值分类讨论
-
-```js
-    then (resolveFn, rejectFn) {
-        return new Promise((resolve, reject) => {
-            // 把resolveFn重新包装一下,再push进resolve执行队列,这是为了能够获取回调的返回值进行分类讨论
-            const fulfilledFn = value => {
-                try {
-                    let x = resolveFn(value)
-                     // 分类讨论返回值,如果是Promise,那么等待Promise状态变更,否则直接resolve
-                    x instanceof Promise ? x.then(resolve, reject) : resolve(x)
-                } catch (err) {
-                    reject(err)
-                }
-            }
-            this._resolveQueue.push(fulfilledFn)
-            const rejectedFn = err => {
-                try {
-                    let x = rejectedFn(err)
-                    x instanceof Promise ? x.then(resolve, reject) : reject(x)
-                } catch (err) {
-                    reject(err)
-                }
-            }
-            this._rejectQueue.push(rejectedFn)
-        })
-    }
-
-```
-
-以上已经初步完成了链式调用，但是对于then方法，我们还需要处理两个细节
-
-1. 值穿透：根据规范，如果 then() 接收的参数不是function，那么我们应该忽略它。如果没有忽略，当then()回调不为function时将会抛出异常，导致链式调用中断
-2. 处理状态为resolve/reject的情况：其实我们上边 then() 的写法是对应状态为pedding的情况，但是有些时候，resolve/reject 在 then() 之前就被执行（比如Promise.resolve().then()），如果这个时候还把then()回调push进resolve/reject的执行队列里，那么回调将不会被执行，因此对于状态已经变为fulfilled或rejected的情况，我们直接执行then回调：
-
-```js
-   then (resolveFn, rejectFn) {
-        typeof resolveFn !== 'function' ? resolveFn = value => value : null
-        typeof rejectFn !== 'function' ? rejectFn = value => value : null
-        return new Promise (resolve, reject) {
-            const fulfilledFn = value => {
-                try {
-                    let x = resolveFn(value)
-                    x instanceof Promise ? x.then(resolve, reject) : resolve(value)
-                } catch (err) {
-                   reject(err)
-                }
-               
-            }
-            
-
-            const rejectedFn = value => {
-                try {
-                    let x = rejectFn(value)
-                    x instanceof Promise ? x.then(resolve, reject) : reject(value)
-                } catch (err) {
-                    reject(err)
-                }
-            }
-
-            switch(this._status) {
-                case PENDING: 
-                    this._resolveQueue.push(fulfilledFn)
-                    this._resolveQueue.push(rejectedFn)
-                    break;
-                case  FULFILLED:
-                    fulfilledFn(this._value)
-                    break;
-                case REJECTED:
-                    rejectedFn(this._value)
-                    break;
-            }
-           
-        }
-   }
-```
-
-兼容同步任务
-
-Promise的执行顺序是```new Promise -> then()收集回调 -> resolve/reject执行回调```，然后放出完整代码。这一顺序是建立在executor是异步任务的前提上的，如果executor是一个同步任务，那么顺序就会变成new Promise -> resolve/reject执行回调 -> then()收集回调，resolve的执行跑到then之前去了，为了兼容这种情况，我们给resolve/reject执行回调的操作包一个setTimeout，让它异步执行
-
-> 这里插一句，有关这个setTimeout，其实还有一番学问。虽然规范没有要求回调应该被放进宏任务队列还是微任务队列，但其实Promise的默认实现是放进了微任务队列，我们的实现（包括大多数Promise手动实现和polyfill的转化）都是使用setTimeout放入了宏任务队列（当然我们也可以用MutationObserver模拟微任务）
-
-```js
-  const PENDING = 'pending'
-  const FULFILLED = 'fulfilled'
-  const REJECTED = 'rejected'
-  class MyPromise {
-    constructor (executor) {
-      this._status = PENDING
-      this._value = ''
-      this._resolveQueue = []
-      this._rejectQueue = []
-      let _resolve = (val) => {
-        const run = () => {
-          if (this._status !== PENDING) return
-          
-          this._status = FULFILLED
-          this._value = val
-          while (this._resolveQueue.length) {
-            const callback = this._resolveQueue.shift()
-            callback(val)
-          }
-        }
-        setTimeout(run)
-      }
-      let _reject = (val) => {
-        const run = () => {
-          if (this._status !== PENDING) return
-          
-          this._status = REJECTED
-          this._value = val
-          while (this._rejectQueue.length) {
-            const callback = this._rejectQueue.shift()
-            callback(val)
-          }
-        }
-        setTimeout(run)
-      }
-      executor(_resolve, _reject)
-    }
-    then (resolveFn, rejectFn) {
-      typeof resolveFn !== 'function' ? resolveFn = value => value : null
-      typeof rejectFn !== 'function' ? rejectFn = value => value : null
-      return new MyPromise ((resolve, reject) => {
-        const fulfilledFn = value => {
-          try {
-            let x = resolveFn(value)
-            x instanceof Promise ? x.then(resolve, reject) : resolve(x)
-          } catch (err) {
-            reject(err)
-          }
-        }
-        const rejectedFn = value => {
-          try {
-            let x = rejectFn(value)
-            x instanceof Promise ? x.then(resolve, reject) : resolve(x)
-          } catch (err) {
-            reject(err)
-          }
-        }
-        switch(this._status) {
-          case PENDING: 
-           this._resolveQueue.push(fulfilledFn)
-           this._resolveQueue.push(rejectedFn)
-           break;
-          case  FULFILLED:
-           fulfilledFn(this._value)
-           break;
-          case REJECTED:
-           rejectedFn(this._value)
-           break;
-        }
-      })
-    }
   }
+  ajaxAsync('http://www.baidu.com').then(() => {}, () => {})
 ```
 
-#### 手动实现promise.catch
+1. 我们可以很轻松的将异步函数封装成promise，尤其是异步函数，改为promise之后就可以进行链式调用，增强可读性
+2. 将带有回调函数的异步改为promise也很简单，只需要在内部实例化promise之后，在原来执行回调函数的地方对应执行promise的状态函数即可
 
-catch方法在于执行回调去获取reject的结果，所以只需执行一下then并传入callback就实现了，相对好理解。
+## 4. promise的规范解读
+
+**要求**
+
+1. 在执行上下文堆栈仅包含平台代码之前，不能调用`onFulfilled`和`onRejected`
+2. `onFulfilled`和`onRejected`必须作为普通函数调用（即非实例化调用，这样函数内部this非严格指向window）
+3. then方法可以被同一个`promise`多次调用
+4. then方法必须返回一个promise对象 promise2 = promise1.then(onFulfilled, onRejected)
+  + 只要`onFulfilled`或者`onRejected`返回一个值`x`，promise2都会进入`onFulfilled`状态
+  + 如果`onFulfilled`或者`onRejected`抛出一个异常`e`，则`promise2`必须拒绝执行，并返回拒因`e`
+  + 如果`onFulfilled`不是函数且`promise1`状态变成已完成，`promise2`必须成功执行并且返回相同的值
+  + 如果`onRejected`不是函数且`promise1`状态变成已拒绝，`promise2`必须拒绝执行回调并且返回相同拒因
+
 
 ```js
-  class MyPomise {
-    ...
+  const promise = new Promsie((resolve, reject) => {
+    reject(new Error('error'))
+  })
 
-    catch (errorFn) {
-      this.then(null, errorFn)
-    }
-  }
+  // 常见面试题-关键考点1
+  promise
+    .catch(err => {
+      console.log(err)
+    })
+    .then(() => {
+      console.log('promise2 fulfilled')
+    })
+
+  // error
+  // promise2 fulfilled
+  // 原因： promiseA+规范只要promise返回一个x值，就会进入fulfilled状态，所以执行完catch函数后仍然可以执行.then函数
+
+  // 常见面试题-关键考点2
+  promise
+    .catch(err => {
+      throw err
+    })
+    .then(() => {
+      console.log('promise2 fulfilled')
+    })
+    .catch(err => {
+      console.log('err')
+    })
+  // err
+  // 原因： promiseA+规范只要promise抛出异常throw出去，then就不会执行
 ```
+## 5. promise的解决过程
 
-#### 手动实现promise.all
+promise的解决过程是一个抽象的操作，其需要输入一个promise和一个值，我们表示为[[Resolve]](promise, x)(这句话的意思就是把promise resolve了同时传入一个x值)
 
-业务场景中，我们经常会遇到不止一个promie的场景，因此需要合并一次执行多个promise，统一返回结果，Promise.all就是为了解决此问题。
 
-all方法不需要实例化类，即可直接通过该类来调用的方法，即称之为“静态方法”，所以在class中书写要加static关键字
-
-> 根据Promise A+规范，Promise.all可以同时执行多个Promise，并且在所有的Promise方法都返回完成之后才返回一个数组返回值。当有其中一个Promise reject的时候，则返回reject的结果。
+如果`x`有`then`方法且按上去像一个`promise`，解决程序即尝试使promise接受`x`的状态，否则其用`x的值执行promsie`
+  + 如果promise和x指向同一个对象，以TypeError为拒因拒绝执行promise
+  + 如果x是一个promise
+    - x => pending，promise需要保持pending直至x被执行或者被拒绝
+    - x => fulfilled，用相同的值执行promise
+    - x => rejected，用相同的拒因拒绝promise
 
 ```js
-  class MyPomise {
-    ...
+  const promise = new Promise((resolve, reject) => {
+   resolve()
+  })
 
-    static all (promises) {
-      return new MyPromise((resolve, reject) => {
-        let result = [] // 存放promise resolve时的返回值
-        /* 
-        * @param {MyPromise} promise 每一个promise方法
-        * @param {number} index 索引
-        * @param {string[]} result 收集返回结果的数组
-        */
-        const deepPromise = (promise, index, result) => {
-          // 边界值限定：所有执行完之后返回收集数组
-          if (index > promises.length -1) {
-            return result
-          }
-      
-          if (typeof promise.then === 'function') {
-            promise.then((res) => {
-              index++
-              result.push(res)
-              deepPromise(promises[index], index, result)
-            }).catch(err => {
-              reject(err instanceof Error ? e.message : err)
-            })
-          } else {
-            index++
-            result.push(promise)
-            deepPromise(promises[index], index, res)
-          }
-        }
-      })
+  const promise2 = promise()
+    .then(() => {
+      return 'string'
+    })
 
-      deepPromise(promises[0], 0 , result)
+  
+  promise2.then(content => {
+    console.log('content', content) 
+  })
 
-      resolve(result)
-    }
-  }
+  // content:string
+
+  const promise3 = promise()
+    .then(() => {
+      return '123'
+    })
+  const promise4 = promise()
+    .then(() => {
+      return promise3
+    })
+
+  promise4.then(content => {
+    console.log('content', content) 
+  })
+
+  // content:123
 ```
-
-#### 手动实现Promise.resolve
-
+  + 如果x是一个对象或者普通函数
+    - 如果x具有then方法，首先尝试执行x.then
+    - 如果读取x.then的值抛出错误e，则以e为拒因拒绝promise
+    - 如果then是函数，将x作为函数的作用域this调用，传递两个回调函数作为参数，第一个参数叫做`resolvePromise`，第二个参数叫做`rejectPromsie`
+      + `resolvePromise`如果被执行，then方法则被变成已完成状态
+      + `rejectPromsie`如果被执行，then方法则被变成已拒绝状态
+      + `resolvePromise`和`rejectPromsie`同时被调用，或者被同一参数调用了多次，则优先采用首次调用并忽略其他的调用
+      + 如果调用then抛出异常e，如果`resolvePromise`或者`rejectPromsie`被调用，则忽略，否则以e为拒因拒绝promise
+    - 如果then不是函数，以x为参数将promise变成已完成状态
+  + 如果x不是对象或者函数，以x为参数将promise变成已完成状态
 ```js
-  class MyPromise {
-    static resolve (val) {
-      return new MyPromise((resolveFn, rejectFn) => {
-        resolveFn(val)
-      })
+  const promise = new Promise((resolve, reject) => {
+   resolve()
+  })
+
+  // 如果读取x.then的值抛出错误e，则以e为拒因拒绝promise
+  const obj = {
+    get then(){
+      throw new Error('error')
     }
   }
 
-  // 测试
-  MyPromise.resolve('static resolve').then(res => {
-    console.log(res)
-  })
+  promise
+    .then(() => {
+      return obj
+    })
+    .then((obj) => {
+      console.log('obj', obj)
+    })
+    .catch(error => {
+      console.log('123', error)
+    })
+  // 123 Error: error at Object.get then [as then] (<anonymous>:7:13)
 
-  // 打印结果
-  // static resolve
-```
+  //  如果then是函数
 
-#### 手动实现Promise.reject
-
-```js
-  class MyPromise {
-    static reject (val) {
-      return new MyPromise((resolveFn, rejectFn) => {
-        rejectFn(val)
-      })
+  const obj1 = {
+    then(resolvePromise, rejectPromsie) {
+      // resolvePromise('123') // 1
+      // rejectPromsie('123') // 2
+      // 3
+      // resolvePromise('123')
+      // rejectPromsie('123') 
+      // 4
+      rejectPromsie('123') 
+      throw new Error('throw error')
     }
   }
 
-  // 测试
-  MyPromise.reject('static reject').catch(e => {
-    console.log(res)
-  })
-
-  // 打印结果
-  // static reject
+  promise
+    .then(() => {
+      return obj1
+    })
+    .then(content => {
+      console.log('content', content)
+    })
+    .catch(error => {
+      console.log('123', error)
+    })
+  // - 1 content:123
+  // - 2 123:123
+  // - 3 content:123
+  // - 4 123 123
 ```
 
-#### 手动实现Promise.allSettled
+## 6. promise构造函数上的静态方法
 
-ECMA官网最新更新了Promise的新的静态方法Promise.allSettled，那么这是一个怎样的方法呢？总体来讲他也是一个批量处理Promise的函数，但是我们已经有了Promise.all，为什么还需要allSettled。要解开这个问题，我们得回顾一下Promise.all。现有的Promise.all我们说过，如果Promise队列里有一个reject，那么他就只会返回reject，所以Promise.all不一定会返回所有结果，很显然Promise.allSettled能够解决这个问题。
++ Promise.resolve
++ Promise.reject
++ Promise.all
++ Promise.race
 
 ```js
-  // Promise A+
-  // 创建三个promise
-  const promise1 = Promise.resolve(1)
-  const promise2 = Promise.resolve(2)
-  const promise3 = Promise.resolve(3)
+// 处理Promise.all需要每个promise都是已完成状态才会执行resolve方法
 
-  Promise.allSettled([promise1,promise12,promise3]).then(res => {
-    console.log(res)
-  })
+const promise1 = new Promise(function (resolve, reject) {
+  return resolve('123')
+})
 
-  // 打印结果
-  /*
-  [
-    {status: 'fulfilished', value: 1},
-    {status: 'fulfilished', value: 2},
-    {status: 'fulfilished', value: 3}
-  ]
-  */
+const promise2 = new Promise(function (resolve, reject) {
+  return reject('456')
+})
 
-  // 添加一个reject
-  const promise4 = Promise.resolve(1)
-  const promise5 = Promise.reject('reject')
-  const promise6 = Promise.resolve(3)
+Promise.all([promise1, promise2])
+  .then(content => console.log('content', content))
+  .catch(err => console.log('err', err))
 
-  Promise.allSettled([promise4, promise5,promise6]).then(res => {
-    console.log(res, 'resolve')
-  }).catch(e => {
-    console.log(e)
-  })
+// VM1773:11 err 456
 
-  // 打印结果
-   /*
-  [
-    {status: 'fulfilished', value: 1},
-    {status: 'rejected', value: 'reject'},
-    {status: 'fulfilished', value: 3}
-  ]
-  */
+Promise.all([
+  promise1.catch(err => console.log('promsie1 error', err)), 
+  promise2.catch(err => console.log('promsie2 error', err)),
+])
+  .then(content => console.log('content', content))
+  .catch(err => console.log('err', err))
 
+// promsie2 error 456
+// content (2) ["123", undefined]
+// 此时不管promsie1, promsie2是什么状态都会执行resolve
 ```
+  
+## 7. 异常处理
 
-可以看出来allSettled和all最大的区别就是，allSettled不管是resolve，还是reject都能完整返回结果数组，只不过每个数组项都是以对象的形式输出，status描述状态，value接收返回值。
-
-实现MyPromise.allSettled
+promise的异常处理由两种形式，一种是作为promise的reject函数进行接收，另外一种形式就是利用promise的catch函数进行捕获
 
 ```js
-  class MyPromise {
-    static allSettled (promises) {
-      return new MyPromise((resolve, reject) => {
-        const result = []
+var promise = new Promise((resolve, reject) => {
+   reject(new Error('error'))
+})
 
-        const deepPromise = (promise, index, result) => {
-          if (index > promises.length -1) {
-            return result
-          }
+promise.then(
+    () => {},
+    error => { 
+        console.log('reject函数进行捕获', error)
+    })
 
-          if (typeof promise.then === 'function') {
-            promise.then(val => {
-              index++
-              result.push({ status: 'fulfilled', value: val })
-              deepPromise(promises[index], index, result)
-            }).catch(err => {
-              index++
-              result.push({ status: 'rejected', value: err })
-              deepPromise(promises[index], index, result)
-            })
-          } else {
-              index++
-              result.push({ status: 'fulfilled', value: err })
-              deepPromise(promises[index], index, result)
-          }
-        }
-
-        deepPromise(promises[0], 0, result)
-        resolve(result)
-      })
-    }
-  }
-  // 测试
-  // 创建三个promise
-  const promise1 = MyPromise.resolve(1)
-  const promise2 = MyPromise.resolve(2)
-  const promise3 = MyPromise.resolve(3)
-
-  MyPromise.allSettled([promise1,promise12,promise3]).then(res => {
-    console.log(res)
-  })
-
-  // 打印结果
-  /*
-  [
-    {status: 'fulfilished', value: 1},
-    {status: 'fulfilished', value: 2},
-    {status: 'fulfilished', value: 3}
-  ]
-  */
-
-  // 添加一个reject
-  const promise4 = MyPromise.resolve(1)
-  const promise5 = MyPromise.reject('reject')
-  const promise6 = MyPromise.resolve(3)
-
-  Promise.allSettled([promise4, promise5,promise6]).then(res => {
-    console.log(res, 'resolve')
-  }).catch(e => {
-    console.log(e)
-  })
-
-  // 打印结果
-   /*
-  [
-    {status: 'fulfilished', value: 1},
-    {status: 'rejected', value: 'reject'},
-    {status: 'fulfilished', value: 3}
-  ]
-  */
+promise.catch(error => {
+    console.log('catch方法进行捕获', error)}
+)
 ```
 
+两种捕获方式的区别在于：
++ reject处理的异常只针对当前返回的promise的状态进行处理，而不处理回调函数当中新产生的Promise的异常状态
++ catch相当于给全局的Promise注册的错误捕获，catch之所以可以处理当前返回的promise的状态的异常是因为链式调用的特点，由于异常没有被处理才会被catch捕获，如果存在reject函数，优先级高于catch；catch进行整体Promise返回的错误状态的捕获，
 
-[出处](https://juejin.im/post/6866372840451473415)
+Promise存在的异常会一直向后传递，直至被捕获
+
+```js
+var promise = new Promise((resolve, reject) => {
+   reject(new Error('error'))
+})
+
+promise
+.then(() => {}, error => { 
+    new Promise((resolve, reject) => {
+       reject(new Error('第二个异常信息'))
+    })
+    console.log('error1', error)
+})
+.catch(error => console.log('error2', error))
+
+// error1 Error: error
+// Error: 第二个异常信息
+```
+
+catch里面有throw或者return了一个拒绝的promise，只有这两种情况，catch之后还会进入已拒绝状态，执行catch，其余情况都会进入已完成状态
+
+```js
+var promise = new Promise((resolve, reject) => {
+   reject(new Error('error'))
+})
+
+promise
+.catch(error => console.log('error2', error)) // fulfilled
+
+promise
+.catch(error => throw Error('这是通过throw抛出来的异常需要进行处理，此时Promise会进入到rejected状态')) // rejected
+
+promise
+.catch(error => {
+  return new Promise((resolve, reject) => {
+    reject(new Error('return了一个拒绝的promis, 此时Promise会进入到rejected状态'))
+  })
+}) // rejected
+
+```
