@@ -4,6 +4,8 @@
 
 - [源码分析之computed](./vue2/computed/computed.md)
 
+- [源码分析之-入口文件](./vue2/code-analyse/1.入口文件.base.md)
+
 ## 手写mini-vue-code
 
 - [合并策略-生命周期](./vue2/code/merge-lifecycle.md)

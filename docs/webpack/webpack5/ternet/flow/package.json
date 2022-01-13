@@ -1,0 +1,19 @@
+{
+  "name": "flow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "debugger.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/generator": "^7.16.0",
+    "@babel/parser": "^7.16.4",
+    "@babel/traverse": "^7.16.3",
+    "@babel/types": "^7.16.0",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1"
+  }
+}

@@ -39,9 +39,20 @@ target.addEventListener(type, handle, useCapture = false)
 
 target.removeEventListener(type, handle, useCapture = false)
 ```
+
 **addEventListener第三个参数不填写默认是冒泡事件**
 
 **react与vue的绑定onclick事件默认是冒泡事件，捕获事件使用onClickCapture**
+
+## 什么是事件委托？
+
+## 事件类型
+
+面试题: mouseover和mouseenter的区别
+
+
+
+
 
 ## 常见的面试题目
 

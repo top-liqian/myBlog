@@ -1,0 +1,23 @@
+// 引入核心模块
+const webpack = require('webpack')
+
+// 引入配置文件
+const options = require('./webpack.config')
+
+// 执行webpack得到编译对象compiler，是webpack的核心编译对象
+const compiler = webpack(options)
+
+// 调用run方法开始启动编译
+compiler.run((err, stats) => {
+    // 编译完成之后的回掉
+    console.log(err) // 打印错误信息
+    // stats是编译之后的描述对象
+    console.log(JSON.stringify(stats.toJson({
+        assets: true, // 产出资源 [main.js]
+        chunks: true, // 代码块 [main]
+        modules: true, // 模块 ['./src/index.js', './src/title.js']
+        entries: true, // 入口entrypoints [./src/index.js]
+    }), null, 2))
+})
+
+// namedChunkGroups是命名的代码块的组，这个概念是webpack4引入的，是为了实现代码分割splitChunks

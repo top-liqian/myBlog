@@ -76,7 +76,7 @@ Virtual DOM 是 DOM 节点在 JavaScript 中的一种抽象数据结构，之所
 
 在diff中，只对同层的子节点进行比较，放弃跨级的节点比较，使得时间复杂从O(n^3)降低值O(n)，也就是说，只有当新旧children都为多个子节点时才需要用核心的Diff算法进行同层级比较。
 
-## 12. key属性的作用是什么？
+## 12. v-for当中的key属性的作用是什么？
 
 在对节点进行diff的过程中，判断是否为相同节点的一个很重要的条件是key是否相等，如果是相同节点，则会尽可能的复用原有的DOM节点。所以key属性是提供给框架在diff的时候使用的，而非开发者。
 
@@ -101,7 +101,16 @@ v-on/@语法糖
 
 ## 16. 在vue中说说你知道的自定义指令
 
-自定义指令两种：一种`全局自定义指令`，vue.js对象提供了`directive`方法，可以用来自定义指令，directive方法接收两个参数，一个是`指令名称`，另一个是`函数`；第二种是`局部自定义指令`，通过组件的`directives`属性定义。
+自定义指令两种：
+1. 一种`全局自定义指令`，vue.js对象提供了`directive`方法，可以用来自定义指令，directive方法接收两个参数，一个是`指令名称`，另一个是`函数`；
+2. 第二种是`局部自定义指令`，通过组件的`directives`属性定义。
+
+指令定义对象可以提供如下几个钩子函数:
+1. bind：只调用一次，指令第一次绑定到元素时调用 bind(el, bindings, vnode, oldVode)
+2. inserted：被绑定元素插入父节点时调用 inserted(el)
+3. update：所在组件的 VNode 更新时调用,组件更新前状态 update(el)
+4. componentUpdated：所在组件的 VNode 更新时调用,组件更新后的状态
+5. unbind：只调用一次，指令与元素解绑时调用。
 
 ## 17. vue.js中常用的4种指令
 
@@ -109,13 +118,33 @@ v-on/@语法糖
 
 + v-for循环渲染；
 
-+ v-bind绑定一个属性；
++ v-bind绑定一个属性（可以简写为：）
 
-+ v-model实现数据双向绑定
++ v-model实现数据双向绑定（支持.trim .number修饰符）
+  
+其他存在的一些指令
+
++ v-once 渲染一次（可以用作优化，但是使用的频率很少）
+  
++ v-html 将字符串转换成dom插入到标签当中（可能会导致xss攻击问题，并且覆盖子元素）
+  
++ v-show不满足是dom隐藏（不可以使用在template标签上面）
++ v-on 可以简写成@给元素绑定事件（常用修饰符.stop .prevent .self .once .passive）
 
 ## 18. v-show指令和v-if指令的区别
 
-它们都是条件渲染指令，不同的是，v-show的值无论是true或false元素都会存在于html页面中，而v-if的值为true时，元素才会存在于html页面中。
+它们都是条件渲染指令，不同的是:
+
++ v-show的值无论是true或false元素都会存在于html页面中，只是切换的当前的dom的显示和隐藏
++ v-if的值为true时，元素才会存在于html页面中。否则不会渲染当前指令所在节点的dom元素
+
+源码对应为：
+
+```js
+with(this) { 
+   return (true) ? _c('div', _l((3), function (i) { return _c('span', [_v("hello")]) }), 0) : _e() 
+}
+```
 
 ## 19. 在vue.js中如何实现路由嵌套
 
@@ -150,4 +179,73 @@ props -> methods -> data -> computed -> watch
 
 ## 26. 请说一下响应式数据的理解？
 
-标准答案： 
++ Vue内部会递归的去循环vue中的data属性,会给每个属性都增加getter和setter，当属性值变化时会更新视图
++ 重写了数组中的方法，当调用数组方法时会触发更新,也会对数组中的数据(对象类型)进行了监控
+  
+**通过以上两点可以发现Vue中的缺陷:**
+
++ 对象默认只监控自带的属性，新增的属性响应式不生效 (层级过深，性能差)
++ 数组通过索引进行修改 或者 修改数组的长度，响应式不生效
+  
+为了解决以上问题，vue提供来额外的API：
+
+```js
+vm.$set(vm.arr,0,100); // 修改数组内部使用的是splice方法 
+vm.$set(vm.address,'number','6-301'); // 新增属性通过内部会将属性定义成响应式数据        
+vm.$delete(vm.arr,0);  // 删除索引，属性
+```
+
+为了解决以上的问题，Vue3.0使用Proxy来进行解决
+
+```js
+let obj = {
+    name: { name: 'liqian' },
+    arr: ['1', '2', '3']
+}
+let handler = {
+    get (target, key) {
+        if(typeof target[key] === 'object' && target[key] !== null) {
+            return new Proxy(target[key], handler)
+        }
+        return Reflect.get(target, key)
+    },
+    set(target, key, value) {
+        let oldValue = target[key]
+        if (!oldValue) {
+            console.log('新增属性')
+        } else if(oldValue !== value) {
+            console.log('修改属性')
+        }
+        return Reflect.set(target, key, value)
+    }
+}
+let proxy = new Proxy(obj, handler)
+```
+
+## 27. 什么是库，什么是框架
+
++ 库是将代码集合成一个产品，我们调用库中的方法来实现自己的功能
++ 框架是为了解决一类问题而开发的产品，框架是我们在指定的位置编写好代码，框架帮我们调用
+
+## 28. MVC和MVVM的区别？
+
++ 传统的MVC指的是，用户操作会请求服务器端的路由，路由会调用对应的控制器来处理，控制器会获取数据，将结果返回给前端，页面重新渲染
+
++  MVVM：传统的前端会将数据手动渲染在页面上，MVVM模式不需要用户手动手机DOM元素，而是直接将数据绑定到viewModel上面，会自动渲染数据到页面当中，试图变化会通知viewModel层更新数据，viewModel就是我们MVVM模式当中的桥梁，Vue并不是严格意义上面的MVVM模型，严格的MVVM模式是不允许view和model直接通信的，只能通过viewModel来进行通信
+
+## 29. vue模版当中的优先级？
+
+render > template > el
+
+## 30. v-for和v-if连用的问题
+
+v-for会比v-if的优先级高一些，如果连用的话会把v-if给每一个元素都添加一下，会造成性能问题（使用计算属性优化）
+
+```js
+with(this) { 
+  return _l((3), function (i) { return (false) ? _c('div', [_v("hello")]) : _e() }) 
+}
+```
+
+## 31. 实现一个v-lazy自定义插件
+

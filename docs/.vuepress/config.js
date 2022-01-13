@@ -94,6 +94,7 @@ module.exports = {
               title: 'vue2',
               collapable: false,
               children: [
+                { title: '1.源码分析之-入口文件', path: '/vue/vue2/code-analyse/1.入口文件.base' },
                 { title: '源码分析之computed', path: '/vue/vue2/computed/computed' },
               ]
             },

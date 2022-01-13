@@ -87,7 +87,4 @@ Vue.prototype._init = function (options?: Object) {
 
 performance是2.2.0新增的，主要是为了进行性能跟踪，设置为true 以在浏览器开发工具的性能/时间线中启用对组件初始化，编译，渲染，打补丁的性能追踪，只适用于开发环境和支持```performance.mark``` API的浏览器上
 
-
-
-
 #### 
