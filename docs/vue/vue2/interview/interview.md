@@ -18,3 +18,5 @@
 > 1. 在命令行当中输入 vue inspect > config.js 可以得到入口文件 
 > 2. 入口文件是vue.runtime.esm.js
 > 3. 想调试哪里就调试哪里就可以了
+
+4. Vue2.3中新增了一个异步组件**AsyncComponent**，一种能异步加载并且能自定义**loading**的方法，允许我们自定义加载方式（依赖版本：vue-router：2.4.0+、vue：2.3+）
