@@ -29,3 +29,7 @@ for (let i of iterable) {
     console.log('i', i)
 }
 ```
+
+## 2. 什么是类数组
+
+有索引，有长度，能遍历

@@ -27,6 +27,8 @@ function * main () {
 
     const others = yield ajax('/api/get')
     console.log(others)
+
+    const noOthers = yield
 }
 
 const g = main()
